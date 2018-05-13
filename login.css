@@ -1,0 +1,65 @@
+body {
+    background-color: #36485f;
+}
+
+#fastack {
+    font-size: 40px;
+    color: white;
+    padding-top: 70;
+}
+
+#loginWith {
+    font-size: 20px;
+    color: white;
+    padding-bottom: 20;
+}
+
+input[type=text] {
+    margin: auto;
+    font-size: 16px;
+    color: white;
+    outline: none;
+    border: 0;
+    background: transparent;
+    padding-bottom: 10px;
+    border-bottom: 1px solid white;
+}
+
+input[type=password] {
+    margin: auto;
+    font-size: 16px;
+    color: white;
+    outline: none;
+    border: 0;
+    background: transparent;
+    padding-bottom: 10px;
+    border-bottom: 1px solid white;
+}
+
+span {
+    margin: auto;
+    font-size: 16px;
+    display: block;
+    color: orange;
+    outline: none;
+    border: 0;
+    background: transparent;
+    padding-bottom: 10px;
+}
+
+input[type=submit] {
+    align-self: stretch;
+    display: block;
+    width: 60%;
+    padding: 20;
+    background: #59cbbd;
+    outline: none;
+    border: 0;
+    margin-top: 30;
+    color: white;
+    font-size: 15px;
+}
+
+::placeholder {
+    color: white;
+}
