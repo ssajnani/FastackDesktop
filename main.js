@@ -35,7 +35,6 @@ app.on('ready', () => {
     frame: false,
     resizable: true,
     transparent: true,
-    frame: false
   });
   // Tell the popup window to load our login.html file
   window.loadURL(`file://${path.join(__dirname, './login.html')}`);
@@ -52,11 +51,12 @@ const toggleWindow = () => {
   if (window.isVisible()) {
     window.hide()
   } else {
-    showWindow()
+    showWindowbef()
   }
 };
 
-const showWindow = () => {
+
+const showWindowbef = () => {
   const trayPos = tray.getBounds();
   const windowPos = window.getBounds();
   let x, y = 0
@@ -73,6 +73,7 @@ const showWindow = () => {
   window.show();
   window.focus()
 };
+
 
 ipcMain.on('show-window', () => {
   showWindow()
