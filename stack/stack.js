@@ -48,6 +48,6 @@ $(document).ready(function() {
     }
     setGlobalVariables(settings);
 
-    function createTask
+    //function createTask
 
 });
