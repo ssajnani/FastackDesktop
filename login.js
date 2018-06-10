@@ -73,15 +73,15 @@ $(document).ready(function() {
                     $('#errorpassword').text("Error: " + error);
                     $('#errorpassword').css("font-size", "20px");
                 } else {
-                    githubFunctions.checkFastackRepoExists(ls('token'), username, password, cryptoHelper.encrypt(username, password), function(err, result){
+                    githubFunctions.checkFastackRepoExists(ls('token'), username, password, username, function(err, result){
                        if (result[0] !== ""){
                            var hashed = cryptoHelper.hashPassword(password, result[1]);
                            ls('hashed_pwd', hashed.hash.toString());
+                           ls('repoName', result[0]);
                            window.location.replace("./stack/stack.html");
                        } else {
                            var salt = randomBytes(128).toString();
                            var hashed = cryptoHelper.hashPassword(password, salt);
-                           ls('identifierFile', cryptoHelper.encrypt(username, password));
                            ls('saltncrypt', cryptoHelper.encrypt(salt, password));
                            ls('hashed_pwd', hashed.hash.toString());
                            window.location.replace("./stack/stack_name.html");

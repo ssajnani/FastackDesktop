@@ -53,6 +53,26 @@ exports.getPlan = function(token, callback){
         });
 }
 
+exports.getContent = function(token, username, filepath, repoName, callback){
+    fetch("https://api.github.com/repos/" + username + "/" + repoName + "/contents/" + filepath, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'token ' + token,
+        }
+    }).then((response) => {
+        const isValid = response.status < 400;
+        const body = response._bodyInit;
+        return response.json().then((json) => {
+            if (isValid) {
+                json['repoName'] = repoName;
+                return callback(null, json)
+            } else {
+                return callback(json.message, null);
+            }
+        });
+    });
+}
+
 exports.checkFastackRepoExists = function(token, username, password, filename, callback){
     fetch("https://api.github.com/user/repos?visibility=all&affiliation=owner", {
         method: 'GET',
@@ -66,15 +86,25 @@ exports.checkFastackRepoExists = function(token, username, password, filename, c
             response.json().then((json) => {
                 if (isValid) {
                     var nameArray = json.map(function(item) { return item.name});
-                    async.map(nameArray, async.apply(this.getContent, token, username), function(err, contentArray){
+                    var temp = this;
+                    var found = false;
+                    async.map(nameArray, async.apply(this.getContent, token, username, ""), function(err, contentArray){
                         for (var repoCount = 0; repoCount < contentArray.length; repoCount++){
                             for (var fileCount = 0; fileCount < contentArray[repoCount].length; fileCount++) {
-                                if (cryptoHelper.decrypt(contentArray[repoCount][fileCount].name, password) == username) {
-                                    return callback(null, [json[repoCount].name, cryptoHelper.decrypt(contentArray[repoCount][fileCount].name, password)]);
+                                if (contentArray[repoCount][fileCount].name === filename) {
+                                    found = true;
+                                    temp.getContent(token, username, filename, json[repoCount].name, function(err, contentInfo){
+                                        if (err){
+                                            return callback('Unable to get file contents.', null);
+                                        }
+                                        return callback(null, [contentInfo['repoName'], contentInfo['content']]);
+                                    });
+                                } else if (repoCount === contentArray.length - 1 && fileCount === contentArray[repoCount].length - 1 && found === false){
+                                    console.log(found);
+                                    return callback(null, ["", ""]);
                                 }
                             }
                         }
-                        return callback(null, ["", ""]);
                     });
                 } else {
                     return callback(json.message, null);
@@ -83,24 +113,21 @@ exports.checkFastackRepoExists = function(token, username, password, filename, c
         });
 }
 
-exports.getContent = function(token, username, repoName, callback){
-    fetch("https://api.github.com/repos/" + username + "/" + repoName + "/contents/", {
-        method: 'GET',
-        headers: {
-            'Authorization': 'token ' + token,
+exports.checkFileExists = function(token, username, repoName, filename, callback){
+    this.getContent(token, username, "", repoName, function(err, contentArray){
+        if (err){
+            return callback(err, "");
         }
-    }).then((response) => {
-        const isValid = response.status < 400;
-        const body = response._bodyInit;
-        return response.json().then((json) => {
-            if (isValid) {
-                return callback(null, json)
-            } else {
-                return callback(json.message, null);
+        for (var fileCount = 0; fileCount < contentArray.length; fileCount++) {
+            if (contentArray[fileCount].name == filename) {
+                return callback(null, contentArray[fileCount].name);
             }
-        });
+        }
+        return callback(null, "");
     });
 }
+
+
 
 exports.createFile = function(token, username, repoName, filename, fileContent, callback){
     fetch("https://api.github.com/repos/" + username + "/" + repoName + "/contents/" + filename, {
@@ -109,7 +136,7 @@ exports.createFile = function(token, username, repoName, filename, fileContent, 
             'Authorization': 'token ' + token,
         },
         body: JSON.stringify({
-            'content': filename,
+            'content': fileContent,
             'message': filename
         })
     }).then((response) => {

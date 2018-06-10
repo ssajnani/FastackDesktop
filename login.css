@@ -1,11 +1,11 @@
 body {
-    background-color: #36485f;
+    background: linear-gradient(to bottom right, #36485f, rgba(124, 149, 182, 0.8));
 }
 
 #fastack {
     font-size: 40px;
     color: white;
-    padding-top: 70;
+    padding-top: 10;
 }
 
 #loginWith {

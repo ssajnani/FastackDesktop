@@ -31,10 +31,11 @@ $(document).ready(function() {
                         if (err) {
                             $('#errorreponame').text("Cannot make a private repository: " + err);
                         } else {
-                            githubFunctions.createFile(ls('token'), ls('username'), repoName, ls('identifierFile'), ls('saltncrypt'), function (err, result) {
+                            githubFunctions.createFile(ls('token'), ls('username'), repoName, ls('username'), ls('saltncrypt'), function (err, result) {
                                 if (err) {
                                     $('#errorreponame').text("Cannot create an identifier file in the repository: " + err);
                                 } else {
+                                    ls('repoName', repoName);
                                     window.location.replace("./stack.html");
                                 }
                             });
