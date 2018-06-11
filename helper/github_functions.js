@@ -113,8 +113,8 @@ exports.checkFastackRepoExists = function(token, username, password, filename, c
         });
 }
 
-exports.checkFileExists = function(token, username, repoName, filename, callback){
-    this.getContent(token, username, "", repoName, function(err, contentArray){
+exports.checkFileExists = function(token, username, repoName, folderLevel, filename, callback){
+    this.getContent(token, username, folderLevel, repoName, function(err, contentArray){
         if (err){
             return callback(err, "");
         }

@@ -1,5 +1,5 @@
 body {
-    background-color: rgba(54,72,95, 1);
+    background-color: transparent;
 }
 
 #fastack {
@@ -73,6 +73,19 @@ input[type=password] {
     background: transparent;
     padding-bottom: 10px;
     border-bottom: 1px solid white;
+}
+
+#createtask {
+    align-self: stretch;
+    display: block;
+    width: 60%;
+    padding: 20;
+    background: #59cbbd;
+    outline: none;
+    border: 0;
+    margin-top: 10;
+    color: white;
+    font-size: 15px;
 }
 
 span {
