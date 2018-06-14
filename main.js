@@ -35,7 +35,7 @@ app.on('ready', () => {
     frame: false,
     resizable: true,
     transparent: true,
-    frame: false
+    hasShadow: false
   });
   // Tell the popup window to load our login.html file
   window.loadURL(`file://${path.join(__dirname, './login.html')}`);

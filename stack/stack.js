@@ -136,7 +136,6 @@ $(document).ready(function() {
         }
 
     });
-    window.resizeTo(600, 500);
     var settings = {
         "openClose": "alt+z"
     };

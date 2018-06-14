@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(to bottom right, rgba(54,72,95, 1), rgba(124, 149, 182, 1));
+    background: linear-gradient(to bottom right, rgba(54,72,95, 1), rgba(124, 149, 182, 0.5));
 }
 
 #logo {
