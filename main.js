@@ -66,7 +66,7 @@ const showWindowbef = () => {
     y = Math.round(trayPos.y + trayPos.height)
   } else {
     x = Math.round(trayPos.x + (trayPos.width / 2) - (windowPos.width / 2));
-    y = Math.round(trayPos.y + trayPos.height * 10)
+    y = Math.round(trayPos.y - trayPos.height * 12)
   }
 
 
