@@ -144,6 +144,9 @@ $(document).ready(function() {
             settings = result;
         }
         setGlobalVariables(result);
+        if (result.skipTutorial !== true){
+
+        }
     });
 
 

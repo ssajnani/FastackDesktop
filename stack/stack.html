@@ -7,7 +7,16 @@
 <div>
     <div class="row">
         <div class="column">
-            <center><a id="createtask" value="Login">Press Alt+t or click here to create a new task.</a></center>
+            <p id="createTaskTitle">New Task</p>
+            <hr/>
+            <form id="loginGithub">
+                <label for="tname">Task Name </label> <input id="tname" type="text" name="taskname"><br>
+                <hr/>
+                <input type="date" placeholder="Goal Date" name="goaldate"><br>
+                <input type="text" placeholder="Completion Time format hours:minutes (ex. 20:12)" name="goaltime"><br>
+                <input type="text" placeholder="Tags (ex. #school)" name="goaldate"><br>
+                <input type="submit" id="login" value="Login">
+            </form>
         </div>
     </div>
 </div>

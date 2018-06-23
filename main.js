@@ -37,8 +37,8 @@ app.on('ready', () => {
     transparent: true,
     hasShadow: false
   });
-  // Tell the popup window to load our login.html file
-  window.loadURL(`file://${path.join(__dirname, './login.html')}`);
+  // Tell the popup window to load our loginGithub.html file
+  window.loadURL(`file://${path.join(__dirname, './home.html')}`);
 
   // Only close the window on blur if dev tools isn't opened
   window.on('blur', () => {
