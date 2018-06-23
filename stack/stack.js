@@ -13,6 +13,7 @@ var window = BrowserWindow.getFocusedWindow();
 
 
 $(document).ready(function() {
+    $("body").css("background-color", "transparent");
     function getCreateSettings(callback) {
         githubFunctions.checkFileExists(ls('token'), ls('username'), ls('repoName'), "", "settings", function (err, contentArray) {
             if (err == null && contentArray === "") {
