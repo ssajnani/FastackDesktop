@@ -19,7 +19,8 @@ body {
 }
 
 .draggable {
-    -webkit-app-region: drag;
+    -ms-overflow-style: scrollbar;
+    -webkit-app-region:drag;
 }
 
 #errorpassword {
