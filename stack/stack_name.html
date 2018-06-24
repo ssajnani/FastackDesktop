@@ -1,18 +1,20 @@
 <html>
-<head>
-    <title>FaStack</title>
-    <link rel="stylesheet" type="text/css" href="stackInfo.css">
-</head>
-<body>
-<div>
-    <center><p id="gitRepo">Github Repository</p></center>
-    <form id="RepoNameSubmit">
-    <center><input id="reponame" type="text" placeholder="Repository Name" name="username"></center><br>
-    <center><span id="errorreponame spanClass">    </span></center>
-    <center><a id="createrepo" value="Create Repository">Get Started</a></center>
-    <center><a class="textRepoLink" id="works">How Fastack with Github works?</a></center>
-    </form>
-</div>
-<script charset="utf-8" type="text/javascript" src="./stackInfo.js"></script>
-</body>
+    <head>
+        <title>FaStack</title>
+        <link rel="stylesheet" type="text/css" href="../login.css">
+    </head>
+    <body>
+        <div>
+            <div class="center titleIcon"> <img src="../images/GitHub_Logo.png" alt = "Github logo as text" height="102px" width="250px"></div>
+            <div class="center"><img id="logoCat" src="../images/git_icon.svg" alt="Github logo - octocat" width="100px" height="100px"></div>
+
+            <form id="RepoNameSubmit">
+            <center><input id="reponame" type="text" placeholder="Repository Name" name="username"></center><br>
+            <center><span id="errorreponame">    </span></center>
+            <center><input type="submit" value="Create Repository"></input></center>
+            <div class="footer" id="works">How FaStack with Github works?</div>
+            </form>
+        </div>
+    <script charset="utf-8" type="text/javascript" src="./stackInfo.js"></script>
+    </body>
 </html>
