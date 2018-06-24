@@ -1,7 +1,6 @@
 const { BrowserWindow, globalShortcut } = require("electron").remote;
 const path = require('path');
 const $ = require('jquery');
-$.fn.datetimepicker = require('eonasdan-bootstrap-datetimepicker');
 var remote = require("electron").remote;
 const electron = require('electron');
 const base64 = require('base-64');
@@ -15,7 +14,6 @@ var window = BrowserWindow.getFocusedWindow();
 
 $(document).ready(function() {
     $("body").css("background-color", "transparent");
-    $("#datetimepicker").datetimepicker();
     function getCreateSettings(callback) {
         githubFunctions.checkFileExists(ls('token'), ls('username'), ls('repoName'), "", "settings", function (err, contentArray) {
             if (err == null && contentArray === "") {
