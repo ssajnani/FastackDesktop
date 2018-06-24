@@ -18,6 +18,10 @@ body {
     padding-top: 10%;
 }
 
+.draggable {
+    -webkit-app-region: drag;
+}
+
 #errorpassword {
     padding: 2%;
     box-sizing: border-box;

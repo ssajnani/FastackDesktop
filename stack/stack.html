@@ -1,25 +1,60 @@
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <title>FaStack</title>
     <link rel="stylesheet" type="text/css" href="stackInfo.css">
 </head>
 <body>
 <div>
-    <div class="row">
+    <div class="rows">
         <div class="column">
             <p id="createTaskTitle">New Task</p>
-            <hr/>
             <form id="loginGithub">
-                <label for="tname">Task Name </label> <input id="tname" type="text" name="taskname"><br>
-                <hr/>
-                <input type="date" placeholder="Goal Date" name="goaldate"><br>
-                <input type="text" placeholder="Completion Time format hours:minutes (ex. 20:12)" name="goaltime"><br>
-                <input type="text" placeholder="Tags (ex. #school)" name="goaldate"><br>
-                <input type="submit" id="login" value="Login">
+                <div class="tab">
+                    <div class="taskInput">
+                        <label for="tname">Task Name </label><br><br>
+                        <input id="tname" type="text" name="taskname"><br><br>
+                    </div>
+
+                    <div class="taskInput">
+                        <label for="startDate">Start Date</label>
+                        <input id="startDate" type="datetime-local"><br><br>
+                    </div>
+                    <div class="taskInput">
+                        <label for="compDate">Completion Date</label>
+                        <input id="compDate" type="datetime-local"><br><br>
+                    </div>
+
+                    <label for="compDate">Estimated Time Required</label><br><br><br>
+                    <div class="centerTaskInput">
+                        <input type="number" placeholder="hours" min="0" max="100">:<input type="number" placeholder="mins" min="0" max="100">
+                    </div>
+                </div>
+                <div class="tab">
+                    <div class="taskInput">
+                        <label for="description">Description </label><br><br>
+                        <textarea id="description" class="boxInput" name="description"></textarea><br><br>
+                    </div>
+                    <div class="taskInput">
+                        <label for="tags">Tags </label><br><br>
+                        <input id="tags" type="text" name="tags"><br><br>
+                    </div>
+                </div>
+                <div class="tab">
+                    <div class="taskInput">
+                        <label for="description">Notes </label><br><br>
+                        <textarea id="notes" class="boxInput notesInput" name="notes"></textarea><br><br>
+                    </div>
+                </div>
+
+                <div style="text-align:center;margin-top:10px;">
+                    <pre id="bottomText"><i class="arrow down"></i> [Alt+Down]  <i class="arrow up"></i> [Alt+Up] </pre>
+                </div>
+
             </form>
         </div>
     </div>
 </div>
 <script charset="utf-8" type="text/javascript" src="./stack.js"></script>
+
 </body>
 </html>

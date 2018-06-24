@@ -19,17 +19,27 @@ body {
     font-family: myFirstFont;
     font-size: 30px;
     color: white;
-    margin: 5px;
+    margin: 15px;
+    background: transparent;
+}
+
+
+#pageChange {
+    word-spacing: -3px;
+    font-family: myFirstFont;
+    font-size: 15px;
+    color: lightgray;
+    margin: 15px;
 }
 
 label {
     word-spacing: -1px;
     font-family: myFirstFont;
-    font-size: 16px;
+    font-size: 14px;
     color: white;
-    margin: 0;
-    padding: 1em 1em 1em 0;
-    border-right: 3px solid white;
+    margin: auto;
+    padding: 1em 1em 1em 8%;
+    float: left;
 }
 
 hr {
@@ -41,21 +51,39 @@ hr {
     padding: 0;
 }
 
-.column {
+.subcolumn {
     padding: 5%;
     border-radius: 25px;
+    float: left;
+    width: 40%;
+}
+
+/* Clear floats after the columns */
+.subrow:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.column {
+    padding: 5%;
+    border-radius: 5px;
     background: rgba(100, 149, 162, 0.95);
     float: left;
-    width: 90%;
-    height: 90%;
+    width: 95%;
+    height: 83.3%;
 
 }
 
 /* Clear floats after the columns */
-.row:after {
+.rows:after {
     content: "";
     display: table;
     clear: both;
+}
+
+.col-sm-6 {
+    position: relative;
 }
 
 #gitRepo {
@@ -103,28 +131,129 @@ hr {
     margin-top: 30px;
 }
 
-input[type=text] {
-    margin: 0;
-    padding: 0;
-    word-spacing: -1px;
-    font-family: myFirstFont;
-    font-size: 16px;
-    color: white;
-    outline: none;
-    border: 0;
-    background: transparent;
+.taskInput{
+    margin:auto;
+    width: 100%
 }
 
-input[type=password] {
+.centerTaskInput{
+    margin:auto;
+    width: 80%;
+    text-align: center;
+    color: black;
+    border-bottom: 1px solid white;
+}
+
+#loginGithub{
+    text-align: center;
+    position: relative;
+}
+
+.col-sm-6{
+    margin: 0!important;
+    padding: 0!important;
+    width: 100%!important;
+}
+.container{
+    margin: 0!important;
+    padding: 0!important;
+    width: 100%!important;
+}
+
+.row {
+    padding: 5%!important;
+}
+
+input[type=text] {
+    padding: 0;
+    word-spacing: -1px;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     margin: auto;
-    font-size: 16px;
-    color: white;
+    font-size: 14px;
+    color: black;
     outline: none;
     border: 0;
     background: transparent;
-    padding-bottom: 10px;
     border-bottom: 1px solid white;
+    width: 80%;
 }
+
+.boxInput{
+    padding: 0;
+    word-spacing: -1px;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    margin: auto;
+    font-size: 14px;
+    color: black;
+    outline: none;
+    border: 0;
+    background: transparent;
+    border-bottom: 1px solid white;
+    width: 80%;
+    height: 40%
+}
+
+.notesInput{
+    height: 60%!important;
+}
+input[type=datetime-local] {
+    padding: 0!important;
+    word-spacing: -1px;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    margin: auto!important;
+    font-size: 14px;
+    color: black;
+    outline: none!important;
+    border: 0;
+    background: transparent!important;
+    border-bottom: 1px solid white;
+    width: 80%!important;
+}
+
+input[type=number] {
+    padding: 0!important;
+    word-spacing: -1px;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    margin: auto!important;
+    font-size: 14px;
+    color: black;
+    outline: none!important;
+    border: 0;
+    background: transparent!important;
+    width: 30%
+}
+
+/* Hide all steps by default: */
+.tab {
+    display: none;
+}
+
+/* Mark input boxes that gets an error on validation: */
+input.invalid {
+    background-color: #ffdddd;
+}
+
+/* Make circles that indicate the steps of the form: */
+.step {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+}
+
+.step.active {
+    opacity: 1;
+}
+
+/* Mark the steps that are finished and valid: */
+.step.finish {
+    background-color: #4CAF50;
+}
+
 
 #createtask {
     font-family: "Trebuchet MS", Helvetica, sans-serif;
@@ -145,7 +274,7 @@ span {
     margin: auto;
     font-size: 16px;
     display: block;
-    color: red;
+    color: black;
     outline: none;
     border: 0;
     background: transparent;
@@ -166,6 +295,34 @@ span {
     font-size: 15px;
 }
 
-::placeholder {
-    color: white;
+i {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
 }
+
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+.left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
+
+.up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
+
+.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+::placeholder {
+    color: black;
+}
+
