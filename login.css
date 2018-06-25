@@ -93,6 +93,7 @@ input[type=text] {
     padding-bottom: 10px;
     padding-top: 10px;
     border-bottom: 1px solid white;
+    -webkit-app-region:no-drag;
 }
 
 input[type=password] {
@@ -104,6 +105,7 @@ input[type=password] {
     background: transparent;
     padding-bottom: 10px;
     border-bottom: 1px solid white;
+    -webkit-app-region:no-drag;
 }
 
 span {
@@ -130,6 +132,7 @@ span {
     color: white;
     border-radius: 25px;
     font-size: 15px;
+    -webkit-app-region:no-drag;
 }
 
 #github:hover, #dropbox:hover, #google:hover {
@@ -145,6 +148,7 @@ span {
     margin-top: 10px;
     color: white;
     font-size: 15px;
+    -webkit-app-region:no-drag;
 }
 
 input[type=submit] {
@@ -161,6 +165,7 @@ input[type=submit] {
     color: white;
     border-radius: 25px;
     font-size: 15px;
+    -webkit-app-region:no-drag;
 }
 
 input[type=submit]:hover {
@@ -179,6 +184,7 @@ input[type=submit]:hover {
     border-radius: 25px;
     transition: all 1s ease;
     -webkit-transition: all 1s ease;
+    -webkit-app-region:no-drag;
 }
 
 ::placeholder {
@@ -201,11 +207,13 @@ input[type=submit]:hover {
     text-align:center;
     padding-top:25px;
     font-family: "Trebuchet MS";
+    -webkit-app-region:no-drag;
 }
 
 .footer:hover {
     color: white;
     cursor:pointer;
+    -webkit-app-region:no-drag;
 }
 
 .center{
@@ -253,4 +261,5 @@ span {
 
 #repoBack{
     margin-top:38px;
+    -webkit-app-region:no-drag;
 }

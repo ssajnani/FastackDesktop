@@ -307,6 +307,7 @@ input[type=submit] {
     color: white;
     border-radius: 25px;
     font-size: 15px;
+    -webkit-app-region:no-drag;
 }
 
 i {
@@ -356,6 +357,7 @@ input[type=submit]:hover {
     border-radius: 25px;
     transition: all 1s ease;
     -webkit-transition: all 1s ease;
+    -webkit-app-region:no-drag;
 }
 
 
