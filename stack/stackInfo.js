@@ -12,7 +12,8 @@ var window = BrowserWindow.getAllWindows()[0];
 
 
 $(document).ready(function() {
-    $('#createrepo').on('click', function() {
+    $('#RepoNameSubmit').on('submit', function(evt) {
+        evt.preventDefault();
         var repoName = $("#reponame")[0].value;
         $('#errorreponame').text("");
         var reRepo = /^[A-Za-z0-9_.-]+$/;

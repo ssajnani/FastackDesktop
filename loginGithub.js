@@ -81,20 +81,13 @@ $(document).ready(function() {
             var emptyUser = false;
             var emptyPass = false;
             if (username === ""){
-                emptyUser = true;
-            }
-            if (password === ""){
-                emptyPass = true;
-            }
-
-            if (emptyUser){
-                if (emptyPass){
+                if (password === ""){
                     timeoutId = errorLog("Username and password fields cannot be empty");
                 } else {
                     timeoutId = errorLog("Username field cannot be empty");
                 }
             } else {
-                if (emptyPass){
+                if (password === ""){
                     timeoutId = errorLog("Password field cannot be empty");
                 } else {
                     $('#errorpassword').text("");
@@ -109,7 +102,6 @@ $(document).ready(function() {
                         } else {
                             timeoutId = errorLog(error);
                         }
-
                     } else {
                         githubFunctions.checkFastackRepoExists(ls('token'), username, password, username, function(err, result){
                             if (result[0] !== ""){
