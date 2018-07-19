@@ -2,6 +2,7 @@ const { BrowserWindow, globalShortcut } = require("electron").remote;
 const path = require('path');
 const $ = require('jquery');
 var remote = require("electron").remote;
+var Editor = require('tui-editor');
 const electron = require('electron');
 const base64 = require('base-64');
 var ls = require('local-storage');
@@ -135,7 +136,20 @@ $(document).ready(function() {
     for (var displayInd = 0; displayInd < displays.length; displayInd++) {
         width = width + displays[displayInd].bounds.width;
     }
-    window.resizeTo(300, 600);
+
+    $(".te-editor").on('click', function(){
+        $(".CodeMirror").addClass("CodeMirror-focus");
+    });
+
+    var editor = new Editor({
+        el: document.querySelector('#editSection'),
+        initialEditType: 'markdown',
+        previewStyle: 'tab',
+        height: '300px',
+        width: '200px',
+        viewer: true,
+        exts: ['table', 'uml']
+    });
 
     var stack = [];
     lookForStack(function(err, stackValue){
@@ -167,89 +181,4 @@ $(document).ready(function() {
 
         }
     });
-
-    var currentTab = 0; // Current tab is set to be the first tab (0)
-    showTab(currentTab); // Display the crurrent tab
-
-    function showTab(n) {
-        // This function will display the specified tab of the form...
-        var x = document.getElementsByClassName("tab");
-        x[n].style.display = "block";
-        //... and fix the Previous/Next buttons:
-        if (n === 0) {
-            if (globalShortcut.isRegistered(settings.prevPageTask)) {
-                globalShortcut.unregister(settings.prevPageTask);
-            }
-            $('#bottomText').html("<i class=\"arrow down\"></i> [" + settings.nextPageTask + "] ");
-            globalShortcut.register(settings.nextPageTask, function () {
-                nextPrev(1)
-            });
-        } else if (n === (x.length - 1)) {
-            $("#bottomText").html("<i class=\"arrow up\"></i> [" + settings.prevPageTask + "] ");
-            if (globalShortcut.isRegistered(settings.nextPageTask)) {
-                globalShortcut.unregister(settings.nextPageTask);
-            }
-            if (!globalShortcut.isRegistered(settings.prevPageTask)) {
-                globalShortcut.register(settings.prevPageTask, function () {
-                    nextPrev(-1)
-                });
-            }
-        } else {
-            $("#bottomText").html("<i class=\"arrow down\"></i> [" + settings.nextPageTask + "]  <i class=\"arrow up\"></i> [" + settings.prevPageTask + "] ");
-            if (!(globalShortcut.isRegistered(settings.prevPageTask))) {
-                globalShortcut.register(settings.prevPageTask, function () {
-                    nextPrev(-1)
-                });
-            }
-            if (!(globalShortcut.isRegistered(settings.nextPageTask))) {
-                globalShortcut.register(settings.nextPageTask, function () {
-                    nextPrev(1)
-                });
-            }
-        }
-        //... and run a function that will display the correct step indicator:
-        fixStepIndicator(n)
-    }
-
-    function nextPrev(n) {
-        // This function will figure out which tab to display
-        var x = document.getElementsByClassName("tab");
-        // Exit the function if any field in the current tab is invalid:
-        //if (n == 1 && !validateForm()) return false;
-        // Hide the current tab:
-        x[currentTab].style.display = "none";
-        // Increase or decrease the current tab by 1:
-        currentTab = currentTab + n;
-        // if you have reached the end of the form...
-        if (currentTab >= x.length) {
-            // ... the form gets submitted:
-            document.getElementById("regForm").submit();
-            return false;
-        }
-        // Otherwise, display the correct tab:
-        showTab(currentTab);
-    }
-
-    function validateForm() {
-        // This function deals with validation of the form fields
-        var x, y, i, valid = true;
-        x = document.getElementsByClassName("tab");
-        y = x[currentTab].getElementsByTagName("input");
-        // A loop that checks every input field in the current tab:
-        for (i = 0; i < y.length; i++) {
-            // If a field is empty...
-            if (y[i].value == "") {
-                // add an "invalid" class to the field:
-                y[i].className += " invalid";
-                // and set the current valid status to false
-                valid = false;
-            }
-        }
-        // If the valid status is true, mark the step as finished and valid:
-        if (valid) {
-            document.getElementsByClassName("step")[currentTab].className += " finish";
-        }
-        return valid; // return the valid status
-    }
-
 });

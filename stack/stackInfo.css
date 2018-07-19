@@ -72,12 +72,12 @@ hr {
 }
 
 .column {
-    padding: 5%;
+    padding: 0;
     border-radius: 5px;
     background: rgba(100, 149, 162, 0.95);
     float: left;
     width: 95%;
-    height: 83.3%;
+    height: 250%;
 
 }
 
@@ -202,11 +202,11 @@ input[type=text] {
     background: transparent;
     border-bottom: 1px solid white;
     width: 80%;
-    height: 40%
+    height: 20%
 }
 
 .notesInput{
-    height: 60%!important;
+    height: 20%!important;
 }
 input[type=datetime-local] {
     padding: 0!important;
@@ -235,9 +235,12 @@ input[type=number] {
     width: 30%
 }
 
-/* Hide all steps by default: */
-.tab {
-    display: none;
+.te-editor {
+    background-color: white!important;
+}
+
+.te-preview {
+    background-color: white!important;
 }
 
 /* Mark input boxes that gets an error on validation: */

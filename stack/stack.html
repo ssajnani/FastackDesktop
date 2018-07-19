@@ -1,9 +1,22 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src='../node_modules/markdown-it/dist/markdown-it.js'></script>
+    <script src="../node_modules/to-mark/dist/to-mark.js"></script>
+    <script src="../node_modules/tui-code-snippet/dist/tui-code-snippet.js"></script>
+    <script src="../node_modules/codemirror/lib/codemirror.js"></script>
+    <script src="../node_modules/squire-rte/build/squire-raw.js"></script>
+    <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
     <title>FaStack</title>
     <link rel="stylesheet" type="text/css" href="stackInfo.css">
 </head>
 <body class="draggable">
+<script src="../node_modules/tui-editor/dist/tui-editor-Editor.js"></script>
+<script src="../node_modules/tui-editor/dist/tui-editor-extTable.js"></script>
+<script src="../node_modules/plantuml-encoder/"></script>
+<script src="../node_modules/tui-editor/dist/tui-editor-extUML.js"></script>
+<link rel="stylesheet" href="../node_modules/tui-editor/dist/tui-editor.css">
+<link rel="stylesheet" href="../node_modules/tui-editor/dist/tui-editor-contents.css">
 <div>
     <div class="rows">
         <div class="column">
@@ -26,10 +39,9 @@
 
                     <label for="compDate">Estimated Time Required</label><br><br><br>
                     <div class="centerTaskInput">
-                        <input type="number" placeholder="hours" min="0" max="100">:<input type="number" placeholder="mins" min="0" max="100">
+                        <input align="center" type="number" placeholder="hours" min="0" max="100">:<input type="number" placeholder="mins" min="0" max="100">
                     </div>
-                </div>
-                <div class="tab">
+                    <br><br><br>
                     <div class="taskInput">
                         <label for="description">Description </label><br><br>
                         <textarea id="description" class="boxInput" name="description"></textarea><br><br>
@@ -38,14 +50,12 @@
                         <label for="tags">Tags </label><br><br>
                         <input id="tags" type="text" name="tags"><br><br>
                     </div>
-                </div>
-                <div class="tab">
                     <div class="taskInput">
                         <label for="description">Notes </label><br><br>
-                        <textarea id="notes" class="boxInput notesInput" name="notes"></textarea><br><br>
+                        <div id="editSection">
+                        </div>
                     </div>
                 </div>
-
                 <div style="text-align:center;margin-top:10px;">
                     <pre id="bottomText"><i class="arrow down"></i> [Alt+Down]  <i class="arrow up"></i> [Alt+Up] </pre>
                 </div>
