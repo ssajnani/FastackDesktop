@@ -2,6 +2,7 @@
   "name": "Fastack",
   "version": "1.0.0",
   "devDependencies": {
+    "electron-context-menu": "^0.10.0",
     "nodemon": "^1.17.3",
     "webpack": "^4.12.2"
   },

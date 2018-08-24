@@ -15,6 +15,7 @@ var window = BrowserWindow.getFocusedWindow();
 
 $(document).ready(function() {
     $("body").css("background-color", "transparent");
+    $( "ul li:nth-child(2)" ).append( "<span> - 2nd!</span>" );
     function getCreateSettings(callback) {
         githubFunctions.checkFileExists(ls('token'), ls('username'), ls('repoName'), "", "settings", function (err, contentArray) {
             if (err == null && contentArray === "") {
@@ -44,7 +45,7 @@ $(document).ready(function() {
             if (err){
                 return callback(err, null);
             }
-            largestYear = 0
+            largestYear = 0;
             for (var fileCount = 0; fileCount < contentArray.length; fileCount++) {
                 var fourDigits = /^\d{4}$/;
                 if (fourDigits.test(contentArray[fileCount].name)) {

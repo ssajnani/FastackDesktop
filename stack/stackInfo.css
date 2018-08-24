@@ -1,5 +1,7 @@
 body {
     background-color: rgba(100, 129, 162, 0.95);
+    margin: 0;
+    padding: 0;
 }
 
 .draggable {
@@ -10,7 +12,7 @@ body {
 
 #fastack {
     font-size: 40px;
-    color: white;
+    color: rgba(255,255,255,0.9);
     text-align: justify;
     padding-top: 70px;
 }
@@ -24,7 +26,7 @@ body {
     word-spacing: -5px;
     font-family: myFirstFont;
     font-size: 30px;
-    color: white;
+    color: rgba(255,255,255,0.9);
     margin: 15px;
     background: transparent;
 }
@@ -42,7 +44,7 @@ label {
     word-spacing: -1px;
     font-family: myFirstFont;
     font-size: 14px;
-    color: white;
+    color: rgba(255,255,255,0.9);
     margin: auto;
     padding: 1em 1em 1em 8%;
     float: left;
@@ -58,11 +60,19 @@ hr {
 }
 
 .subcolumn {
-    padding: 5%;
+    padding: 0;
     border-radius: 25px;
     float: left;
-    width: 40%;
+    width: 50%;
 }
+
+.tui-editor-defaultUI {
+    display: block!important;
+    margin: 0 auto;
+    width: 80%;
+}
+
+
 
 /* Clear floats after the columns */
 .subrow:after {
@@ -74,10 +84,10 @@ hr {
 .column {
     padding: 0;
     border-radius: 5px;
-    background: rgba(100, 149, 162, 0.95);
+    background: rgba(100, 129, 162, 0.95);
     float: left;
-    width: 95%;
-    height: 250%;
+    width: 100%;
+    height: 270%;
 
 }
 
@@ -94,7 +104,7 @@ hr {
 
 #gitRepo {
     font-size: 20px;
-    color: white;
+    color: rgba(255,255,255,0.9);
     padding-bottom: 20px;
     padding-top: 110px;
     text-align: center;
@@ -102,9 +112,9 @@ hr {
 
 
 .boxAround {
-    border:2px white solid;
+    border:2px rgba(255,255,255,0.9) solid;
     font-size: 25px;
-    color: white;
+    color: rgba(255,255,255,0.9);
     padding-top: 8px;
     margin-top: 10px;
 }
@@ -115,22 +125,27 @@ hr {
 }
 
 .headerInfo {
-    border-bottom:2px white solid;
+    border-bottom:2px rgba(255,255,255,0.9) solid;
     font-size: 20px;
-    color: white;
+    color: rgba(255,255,255,0.9);
     padding-top: 8px;
     margin-top: 5px;
 }
 
 .description {
     font-size: 16px;
-    color: white;
+    color: rgba(255,255,255,0.9);
     text-align: justify;
+}
+
+#description {
+    background: rgba(255,255,255, 0.1);
+    border: 0!important;
 }
 
 /* mouse over link */
 .textRepoLink:hover {
-    color: white;
+    color: rgba(255,255,255,0.9);
     cursor:pointer;
 }
 
@@ -152,11 +167,11 @@ hr {
     margin:auto;
     width: 80%;
     text-align: center;
-    color: white;
-    border-bottom: 1px solid white;
+    color: rgba(255,255,255,0.9);
+    border-bottom: 1px solid rgba(255,255,255,0.9);
 }
 
-#loginGithub{
+#createNewTask{
     text-align: center;
     position: relative;
 }
@@ -182,11 +197,11 @@ input[type=text] {
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     margin: auto;
     font-size: 14px;
-    color: white;
+    color: rgba(255,255,255,0.9);
     outline: none;
     border: 0;
     background: transparent;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid rgba(255,255,255,0.9);
     width: 80%;
 }
 
@@ -196,11 +211,11 @@ input[type=text] {
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     margin: auto;
     font-size: 14px;
-    color: white;
+    color: rgba(255,255,255,0.9);
     outline: none;
     border: 0;
     background: transparent;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid rgba(255,255,255,0.9);
     width: 80%;
     height: 20%
 }
@@ -214,11 +229,11 @@ input[type=datetime-local] {
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     margin: auto!important;
     font-size: 14px;
-    color: white;
+    color: rgba(255,255,255,0.9);
     outline: none!important;
     border: 0;
     background: transparent!important;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid rgba(255,255,255,0.9);
     width: 80%!important;
 }
 
@@ -228,7 +243,7 @@ input[type=number] {
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     margin: auto!important;
     font-size: 14px;
-    color: white;
+    color: rgba(255,255,255,0.9);
     outline: none!important;
     border: 0;
     background: transparent!important;
@@ -236,16 +251,71 @@ input[type=number] {
 }
 
 .te-editor {
-    background-color: white!important;
+    background: rgba(255,255,255,0.1);
+}
+
+.tui-editor {
+    height: 100%!important;
+}
+
+:not(.auto-height) > .tui-editor-defaultUI,
+:not(.auto-height) > .tui-editor-defaultUI > .te-editor-section {
+    border: 0!important;
+}
+
+.te-editor-section {
+    height:90%!important;
+}
+
+
+.tui-editor-defaultUI-toolbar {
+    overflow: scroll!important;
+}
+
+.tui-popup-body {
+    width: 200px;
+}
+
+.CodeMirror {
+    background: transparent!important;
+}
+
+.text {
+    color: rgba(255,255,255,0.9)!important;
+}
+
+.tui-tooltip {
+    z-index: 1000000!important;
 }
 
 .te-preview {
-    background-color: white!important;
+    background-color: rgba(255,255,255, 0.3);!important;
+}
+
+.te-mode-switch-section {
+    display: none!important;
 }
 
 /* Mark input boxes that gets an error on validation: */
 input.invalid {
     background-color: #ffdddd;
+}
+
+#editSection {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+
+    /*
+      Introduced in IE 10.
+      See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+    */
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.te-toolbar-section {
+    background-color: rgba(255,255,255,0.9)!important;
 }
 
 /* Make circles that indicate the steps of the form: */
@@ -281,7 +351,7 @@ input.invalid {
     height: 100%;
     background: rgba(54,72,95, 0.9);
     outline: none;
-    color: white;
+    color: rgba(255,255,255,0.9);
     font-size: 15px;
 }
 
@@ -300,14 +370,14 @@ input[type=submit] {
     align-self: stretch;
     display: block;
     width: 65%;
-    height: 12%;
+    height: 4.5%;
     padding: 20px;
     background: #00A89D;
     outline: none;
     font-weight: bold;
     border: 0;
     margin-top: 5px;
-    color: white;
+    color: rgba(255,255,255,0.9);
     border-radius: 25px;
     font-size: 15px;
     -webkit-app-region:no-drag;
@@ -341,21 +411,21 @@ i {
 }
 
 ::placeholder {
-    color: white;
+    color: rgba(255,255,255,0.9);
 }
 
 input[type=submit]:hover {
     align-self: stretch;
     display: block;
     width: 70%;
-    height: 15%;
+    height: 5%;
     padding: 20px;
     background: #00A89D;
     outline: none;
     font-weight: bold;
     border: 0;
     margin-top: 5px;
-    color: white;
+    color: rgba(255,255,255,0.9);
     font-size: 15px;
     border-radius: 25px;
     transition: all 1s ease;

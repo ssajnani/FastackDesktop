@@ -9,6 +9,14 @@ let window = undefined
 
 // This method is called once Electron is ready to run our code
 // It is effectively the main method of our Electron app
+require('electron-context-menu')({
+    prepend: (params, browserWindow) => [{
+    label: 'Rainbow',
+    // Only show it when right-clicking images
+    visible: params.mediaType === 'image'
+    }]
+});
+
 app.on('ready', () => {
 
   // Setup the menubar with an icon
