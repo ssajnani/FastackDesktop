@@ -48,11 +48,11 @@ $(document).ready(function() {
       var code = (raw_code && raw_code.length > 1) ? raw_code[1] : null;
       var error = /\?error=(.+)$/.exec(url);
 
-
+      loggedIn = true;
       // If there is a code, proceed to get token from github
       if (code) {
-        remote.getCurrentWindow().show();
         getToken(code, function(result){
+
           ls("token", result);
           githubFunctions.getUsername(ls("token"), function(err, username){
             if (err){
@@ -65,7 +65,7 @@ $(document).ready(function() {
                   if (result[1]){
                     console.log(result[1]);
                     ls('repoName', result[0]);
-                    ls('encryptedSecret', result[1]);
+                    ls('encryptedSecret', atob(result[1]));
                     window.location.replace("./stack/stack_name.html");
                   } else {
                     window.location.replace("./stack/stack.html");
@@ -96,8 +96,10 @@ $(document).ready(function() {
 
     // Handle the response from GitHub
     function runOAuthWindowFunctions(window){
+      var loggedIn = false;
       window.webContents.on('will-navigate', function (event, url) {
         window.hide();
+        loggedIn = true;
         handleCallback(url);
       });
 
@@ -107,7 +109,9 @@ $(document).ready(function() {
 
       // Reset the authWindow on close
       window.on('close', function() {
-        remote.getCurrentWindow().show();
+        if(!loggedIn){
+          remote.getCurrentWindow().show();
+        }
       }, false);
     }
 

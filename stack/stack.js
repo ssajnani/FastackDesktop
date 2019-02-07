@@ -1,7 +1,7 @@
-const { BrowserWindow, globalShortcut } = require("electron").remote;
+const { remote } = require('electron');
+const { BrowserWindow, globalShortcut } = remote;
 const path = require('path');
 const $ = require('jquery');
-var remote = require("electron").remote;
 var Editor = require('tui-editor');
 const electron = require('electron');
 const base64 = require('base-64');
@@ -9,11 +9,14 @@ var ls = require('local-storage');
 var githubFunctions = require('../helper/github_functions');
 var { ipcRenderer } = require('electron').remote;
 var cryptoHelper = require('../helper/crypto_helper');
+require('tui-editor/dist/tui-editor-extChart');
+require('tui-editor/dist/tui-editor-extUML');
 
 var window = BrowserWindow.getFocusedWindow();
 
 
 $(document).ready(function(){
+    remote.getCurrentWindow().show();
     $("body").css("background-color", "transparent");
     $( "ul li:nth-child(2)" ).append( "<span> - 2nd!</span>" );
     function getCreateSettings(callback) {
@@ -142,19 +145,20 @@ $(document).ready(function(){
     for (var displayInd = 0; displayInd < totalDisplays; displayInd++) {
         width = width + displays[displayInd].bounds.width;
     }
-
-    $(".te-editor").on('click', function(){
-        $(".CodeMirror").addClass("CodeMirror-focus");
-    });
+    // var prevPos = remote.getCurrentWindow().getSize();
+    // remote.getCurrentWindow().setSize(prevPos[0]*2, prevPos[1]);
 
     var editor = new Editor({
         el: document.querySelector('#editSection'),
-        initialEditType: 'markdown',
         previewStyle: 'tab',
+        initialEditType: 'markdown',
         height: '300px',
         width: '200px',
-        viewer: true,
-        exts: ['table', 'uml']
+        exts: ['scrollSync', 'uml', {
+          name: 'chart',
+          maxWidth: 200,
+          maxHeight: 300
+        }, 'mark', 'table', 'taskCounter']
     });
 
     var stack = [];

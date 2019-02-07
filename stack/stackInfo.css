@@ -2,11 +2,19 @@ body {
     background-color: rgba(100, 129, 162, 0.95);
     margin: 0;
     padding: 0;
+
+}
+body * {
+    -webkit-app-region:no-drag!important;
 }
 
 .draggable {
     -ms-overflow-style: scrollbar;
     -webkit-app-region:drag;
+}
+
+.CodeMirror-cursor {
+    height: 16px!important;
 }
 
 
@@ -203,6 +211,7 @@ input[type=text] {
     background: transparent;
     border-bottom: 1px solid rgba(255,255,255,0.9);
     width: 80%;
+    -webkit-app-region:no-drag;
 }
 
 
@@ -254,7 +263,8 @@ input[type=text] {
     background: transparent;
     border-bottom: 1px solid rgba(255,255,255,0.9);
     width: 80%;
-    height: 20%
+    height: 20%;
+    -webkit-app-region:no-drag;
 }
 
 .notesInput{
@@ -272,6 +282,7 @@ input[type=datetime-local] {
     background: transparent!important;
     border-bottom: 1px solid rgba(255,255,255,0.9);
     width: 80%!important;
+    -webkit-app-region:no-drag;
 }
 
 input[type=number] {
@@ -284,7 +295,8 @@ input[type=number] {
     outline: none!important;
     border: 0;
     background: transparent!important;
-    width: 30%
+    width: 30%;
+    -webkit-app-region:no-drag;
 }
 
 .te-editor {
@@ -306,7 +318,10 @@ input[type=number] {
 
 
 .tui-editor-defaultUI-toolbar {
+    opacity: 0!important;
+    pointer-events:none!important;
     overflow: scroll!important;
+    display: none!important;
 }
 
 .tui-popup-body {
@@ -351,8 +366,16 @@ input.invalid {
     user-select: none;
 }
 
+#editSection *{
+    -webkit-app-region:no-drag!important;
+}
+
 .te-toolbar-section {
     background-color: rgba(255,255,255,0.9)!important;
+}
+
+button {
+    -webkit-app-region:no-drag!important;
 }
 
 /* Make circles that indicate the steps of the form: */

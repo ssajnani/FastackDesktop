@@ -188,7 +188,7 @@ exports.createFile = function(token, username, repoName, filename, fileContent, 
       'Authorization': 'token ' + token,
     },
     body: JSON.stringify({
-      'content': fileContent,
+      'content': btoa(fileContent),
       'message': filename
     })
   }).then((response) => {

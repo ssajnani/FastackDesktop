@@ -1,4 +1,6 @@
-const {BrowserWindow} = require("electron").remote;
+
+const { remote } = require('electron');
+const { BrowserWindow } = remote;
 const path = require('path')
 const $ = require('jquery');
 const electron = require('electron');
@@ -14,10 +16,12 @@ var window = BrowserWindow.getAllWindows()[0];
 
 
 $(document).ready(function () {
+  remote.getCurrentWindow().show();
   function repoAlreadyExists(){
     if (ls("repoName")){
       $("#encstackdata").hide();
       $("#reponame").hide();
+      $("#checkBoxText").hide();
       $('#stackpass').css('opacity', 1);
       $('#stackpass').prop('disabled', false);
       $("#repoSubmit").val("Decrypt Repo");
@@ -89,7 +93,7 @@ $(document).ready(function () {
       errorLog("Stack password cannot be empty.");
     } else {
       var password = $('#stackpass').val();
-      if (!ls(repoName)){
+      if (!ls("repoName")){
         githubFunctions.getPlan(ls('token'), function (err, plan) {
           if (plan.hasOwnProperty('private_repos')) {
             var privateRepo = false;
@@ -124,7 +128,7 @@ $(document).ready(function () {
           }
         });
       } else {
-        var encryptSecrets = ls("enccryptedSecret").split(/\n/);
+        var encryptSecrets = ls("encryptedSecret").split(/\n/);
         var salt = cryptoHelper.decrypt(encryptSecrets[0], password);
         var randHash = cryptoHelper.decrypt(encryptSecrets[1], password);
         var hashedPass = cryptoHelper.hashPassword(password, salt);
