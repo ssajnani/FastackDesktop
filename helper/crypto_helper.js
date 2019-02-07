@@ -25,3 +25,8 @@ exports.hashPassword = function(password, salt) {
         iterations: iterations
     };
 };
+
+exports.generateRandomNumberOfLength = function(size) {
+  var randomLength = Math.floor(Math.random()*length);
+  return Math.floor(Math.pow(10, randomLength-1) + Math.random() * (Math.pow(10, randomLength) - Math.pow(10, randomLength-1) - 1));
+};

@@ -1,5 +1,6 @@
 
-const { BrowserWindow } = require("electron").remote;
+const { remote } = require('electron');
+const { BrowserWindow } = remote;
 const path = require('path');
 const $ = require('jquery');
 const electron = require('electron');
@@ -8,118 +9,106 @@ var githubFunctions = require('./helper/github_functions');
 var ls = require('local-storage');
 var cryptoHelper = require('./helper/crypto_helper');
 var randomBytes = require('randombytes');
+var TOKEN_URL = 'https://fastack.herokuapp.com/authenticate/';
 
-var window = BrowserWindow.getAllWindows()[0];
+var window = remote.getCurrentWindow();
 
-ls("GITHUB_CLIENT_ID", '442dbe2e6a65ceb60986')
-ls("GITHUB_CLIENT_SECRET", '09dbd96778555bde134c32b1b7699016f39fc27c')
+ls("GITHUB_CLIENT_ID", '442dbe2e6a65ceb60986');
 
 const AUTH_URL_PATH = 'https://api.github.com/authorizations';
 var TOKEN = "";
 
-function login(name, pwd, callback) {
-    const bytes = name.trim() + ':' + pwd.trim();
-    const encoded = base64.encode(bytes);
-    return fetch(AUTH_URL_PATH, {
-        method: 'POST',
-        headers: {
-            'Authorization' : 'Basic ' + encoded,
-            'User-Agent': 'GitHub Issue Browser',
-            'Content-Type': 'application/json; charset=utf-8'
-        },
-        body: JSON.stringify({
-            'client_id': ls('GITHUB_CLIENT_ID'),
-            'client_secret': ls('GITHUB_CLIENT_SECRET'),
-            'scopes': ['user', 'repo'],
-            'note': 'not abuse'
-        })
-    })
-        .then((response) => {
-            const isValid = response.status < 400;
-            const body = response._bodyInit;
-            return response.json().then((json) => {
-                if (isValid) {
-                    ls("username", name);
-                    ls('token', json.token);
-                    callback(null, "Login Successful");
-                } else {
-                    callback(json.message, null);
-                }
-            });
-        });
-}
 
-function errorLog(message){
-    $('#errorpassword').toggleClass("trigger");
-    $('#errorpassword').html('<img id="errorsign" src="./images/error.svg" alt="FaStack Logo" width="2000" height="2000"><b>Error</b>: ' + message);
-    var id = setTimeout(function(){
-        $('#errorpassword').removeClass("trigger");
-    }, 2000);
-    return id;
-}
+
+
 
 $(document).ready(function() {
+
+
     $('#login').on('submit', function(evt) {
         evt.preventDefault();
         var btn = $(this).find("input[type=submit]:focus" );
         if (btn[0].id === "github"){
-            $("#logoHome").replaceWith("<img id=\"logoHome\" src=\"./images/git_icon.svg\" alt=\"FaStack Logo\" width=\"100\" height=\"100\">");
-            $("#login").replaceWith("<form id=\"loginGithub\">\n" +
-                "            <center><input id=\"topInput\" type=\"text\" placeholder=\"Username\" name=\"username\"></center><br>\n" +
-                "            <center><span id=\"errorusername\">    </span></center>\n" +
-                "            <center><input type=\"password\" placeholder=\"Password\" name=\"password\"></center><br>\n" +
-                "            <center><input type=\"submit\" id=\"login\" value=\"Login With Github\"></center>\n" +
-                "        </form>");
+          var authWindow = new BrowserWindow({ width: 800, height: 800, show: false, 'node-integration': false });
+          var githubUrl = 'https://github.com/login/oauth/authorize?';
+          var authUrl = githubUrl + 'client_id=' + ls('GITHUB_CLIENT_ID');
+          authWindow.loadURL(authUrl);
+          remote.getCurrentWindow().hide();
+          authWindow.show();
+          runOAuthWindowFunctions(authWindow);
+
+
         };
-        var timeoutId = "";
-        $('#loginGithub').on('submit', function(evt){
-            clearTimeout(timeoutId);
-            evt.preventDefault();
-            var inputs = $("form :input").serializeArray();
-            var username = inputs[0].value;
-            var password = inputs[1].value;
-            var emptyUser = false;
-            var emptyPass = false;
-            if (username === ""){
-                if (password === ""){
-                    timeoutId = errorLog("Username and password fields cannot be empty");
-                } else {
-                    timeoutId = errorLog("Username field cannot be empty");
-                }
-            } else {
-                if (password === ""){
-                    timeoutId = errorLog("Password field cannot be empty");
-                } else {
-                    $('#errorpassword').text("");
-                    $('#errorpassword').removeClass("trigger");
-                }
-            }
-            if (username !== "" && password !== "") {
-                login(username, password, function (error, result) {
-                    if (error) {
-                        if (error.indexOf("Bad credentials") !== -1){
-                            timeoutId = errorLog("Either the username or password were incorrect");
-                        } else {
-                            timeoutId = errorLog(error);
-                        }
-                    } else {
-                        githubFunctions.checkFastackRepoExists(ls('token'), username, password, username, function(err, result){
-                            if (result[0] !== ""){
-                                var hashed = cryptoHelper.hashPassword(password, result[1]);
-                                ls('hashed_pwd', hashed.hash.toString());
-                                ls('repoName', result[0]);
-                                window.location.replace("./stack/stack.html");
-                            } else {
-                                var salt = randomBytes(128).toString();
-                                var hashed = cryptoHelper.hashPassword(password, salt);
-                                ls('saltncrypt', cryptoHelper.encrypt(salt, password));
-                                ls('hashed_pwd', hashed.hash.toString());
-                                window.location.replace("./stack/stack_name.html");
-                            }
-                        });
-                    }
-                });
-            }
-        });
     });
+
+
+
+    function handleCallback (url) {
+      var raw_code = /code=([^&]*)/.exec(url) || null;
+      var code = (raw_code && raw_code.length > 1) ? raw_code[1] : null;
+      var error = /\?error=(.+)$/.exec(url);
+
+
+      // If there is a code, proceed to get token from github
+      if (code) {
+        remote.getCurrentWindow().show();
+        getToken(code, function(result){
+          ls("token", result);
+          githubFunctions.getUsername(ls("token"), function(err, username){
+            if (err){
+              console.log(err);
+            } else {
+              ls("username", username);
+              ls('repoName', "");
+              githubFunctions.checkFastackRepoExists(ls('token'), ls('username'), function(err, result){
+                if (result[0]){
+                  if (result[1]){
+                    console.log(result[1]);
+                    ls('repoName', result[0]);
+                    ls('encryptedSecret', result[1]);
+                    window.location.replace("./stack/stack_name.html");
+                  } else {
+                    window.location.replace("./stack/stack.html");
+                  }
+                } else {
+                  ls("reponame", "");
+                  ls("encstackdata", false);
+                  ls("stackpass", "");
+                  window.location.replace("./stack/stack_name.html");
+                }
+              });
+            }
+          });
+        });
+        return;
+      } else if (error) {
+        alert('Oops! Something went wrong and we couldn\'t' +
+          'log you in using Github. Please try again.');
+        return;
+      }
+    }
+
+    function getToken(code, callback){
+      $.getJSON(TOKEN_URL+code, function(data) {
+        return callback(data.token);
+      });
+    }
+
+    // Handle the response from GitHub
+    function runOAuthWindowFunctions(window){
+      window.webContents.on('will-navigate', function (event, url) {
+        window.hide();
+        handleCallback(url);
+      });
+
+      window.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) {
+        handleCallback(newUrl);
+      });
+
+      // Reset the authWindow on close
+      window.on('close', function() {
+        remote.getCurrentWindow().show();
+      }, false);
+    }
+
 });

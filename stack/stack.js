@@ -13,7 +13,7 @@ var cryptoHelper = require('../helper/crypto_helper');
 var window = BrowserWindow.getFocusedWindow();
 
 
-$(document).ready(function() {
+$(document).ready(function(){
     $("body").css("background-color", "transparent");
     $( "ul li:nth-child(2)" ).append( "<span> - 2nd!</span>" );
     function getCreateSettings(callback) {
@@ -46,7 +46,8 @@ $(document).ready(function() {
                 return callback(err, null);
             }
             largestYear = 0;
-            for (var fileCount = 0; fileCount < contentArray.length; fileCount++) {
+            var fileNum = contentArray.length;
+            for (var fileCount = 0; fileCount < fileNum; fileCount++) {
                 var fourDigits = /^\d{4}$/;
                 if (fourDigits.test(contentArray[fileCount].name)) {
                     if (Integer.parseInt(contentArray[fileCount].name) > largestYear) {
@@ -61,8 +62,9 @@ $(document).ready(function() {
                 if (err){
                     return callback(err, null);
                 }
-                largestMonth = 0
-                for (var fileCount = 0; fileCount < contentArray.length; fileCount++) {
+                largestMonth = 0;
+                var fileNum = contentArray.length;
+                for (var fileCount = 0; fileCount < fileNum; fileCount++) {
                     var twoDigits = /^\d{2}$/;
                     if (twoDigits.test(contentArray[fileCount].name)) {
                         if (Integer.parseInt(contentArray[fileCount].name) > largestMonth) {
@@ -78,7 +80,8 @@ $(document).ready(function() {
                         return callback(err, null);
                     }
                     largestDay = 0
-                    for (var fileCount = 0; fileCount < contentArray.length; fileCount++) {
+                    var fileNum = contentArray.length
+                    for (var fileCount = 0; fileCount < fileNum; fileCount++) {
                         var twoDigits = /^\d{2}$/;
                         if (twoDigits.test(contentArray[fileCount].name)) {
                             if (Integer.parseInt(contentArray[fileCount].name) > largestDay) {
@@ -115,7 +118,8 @@ $(document).ready(function() {
     function fixStepIndicator(n) {
         // This function removes the "active" class of all steps...
         var i, x = document.getElementsByClassName("step");
-        for (i = 0; i < x.length; i++) {
+        var numSteps = x.length;
+        for (i = 0; i < numSteps; i++) {
             x[i].className = x[i].className.replace(" active", "");
         }
         //... and adds the "active" class on the current step:
@@ -134,7 +138,8 @@ $(document).ready(function() {
     let screen = electron.screen;
     let displays = screen.getAllDisplays();
     var width = 0;
-    for (var displayInd = 0; displayInd < displays.length; displayInd++) {
+    var totalDisplays = displays.length;
+    for (var displayInd = 0; displayInd < totalDisplays; displayInd++) {
         width = width + displays[displayInd].bounds.width;
     }
 

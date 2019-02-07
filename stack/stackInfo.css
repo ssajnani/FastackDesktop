@@ -205,6 +205,43 @@ input[type=text] {
     width: 80%;
 }
 
+
+#errorDropdown {
+    padding: 2%;
+    box-sizing: border-box;
+    background: rgba(200, 229, 262, 0.5);
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    left: 2%;
+    top: -10%;
+    width: 96%;
+    float: left;
+    height: 10%;
+    border-radius: 5px;
+    position: absolute;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+}
+
+#errorDropdown.trigger {
+    box-sizing: border-box;
+    background: rgba(200, 229, 262, 0.5);
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    font-size: 14px;
+    left: 2%;
+    padding: 2%;
+    width: 96%;
+    float: left;
+    height: 10%;
+    border-radius: 5px;
+    position: absolute;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+}
+
 .boxInput{
     padding: 0;
     word-spacing: -1px;

@@ -5,13 +5,15 @@
     </head>
     <body class="draggable">
         <div>
-            <div class="center titleIcon"> <img src="../images/GitHub_Logo.png" alt = "Github logo as text" height="102px" width="250px"></div>
-            <div class="center"><img id="logoCat" src="../images/git_icon.svg" alt="Github logo - octocat" width="100px" height="100px"></div>
-
+            <div align="left" id="errorDropdown"></div>
+            <div class="center titleIcon"> <img src="../images/GitHub_Logo.png" alt = "Github logo as text" height="87px" width="213px"></div>
+            <div class="center"><img id="logoCat" src="../images/git_icon.svg" alt="Github logo - octocat" width="85px" height="85px"></div>
             <form id="RepoNameSubmit">
-                <center><input id="reponame" type="text" placeholder="Repository Name" name="username"></center><br>
+                <center><input id="reponame" type="text" placeholder="Repository Name" name="reponame"></center><br>
+                <center><input id="stackpass" type="text" placeholder="Stack Password" name="stackpass" disabled></center><br>
+                <center><input id="encstackdata" type="checkbox" name="encrypt" value="Encrypt"> <nobr>Encrypt Stack Data</nobr> </center>
                 <center><span id="errorreponame">    </span></center>
-                <center><input type="submit" value="Create Repository"></center>
+                <center><input id="repoSubmit" type="submit" value="Create Repository"></center>
             </form>
             <div class="footer" id="works">How FaStack with Github works?</div>
         </div>
