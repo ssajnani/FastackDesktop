@@ -43,10 +43,8 @@ app.on('ready', () => {
     show: false,
     frame: false,
     resizable: true,
-    movable: true,
     transparent: true,
-    hasShadow: false,
-    alwaysOnTop: true
+    hasShadow: false
   });
   // Tell the popup window to load our loginGithub.html file
   window.loadURL(`file://${path.join(__dirname, './home.html')}`);

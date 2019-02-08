@@ -152,28 +152,28 @@ $(document).ready(function () {
     resizable: true,
     hasShadow: false
   });
-  tuiWindow.loadURL(`file://${path.join(__dirname, './tui_viewer.html')}`);
   setTimeout(function () {
     console.log($("textarea"));
     $("textarea").focus(function (evt) {
       evt.preventDefault();
       if ($(".CodeMirror-focused").length > 0) {
+        remote.getCurrentWindow().webContents.send('get_data_write', "hereeee");
         console.log('focused');
         tuiWindow.showInactive();
       }
     });
-    $("textarea").focusout(function (evt) {
-      evt.preventDefault();
-      setTimeout(function () {
-        console.log($(".CodeMirror-focused").is(":visible"));
-        console.log('out of focus');
-        if ($(".CodeMirror-focused").length == 0) {
-          tuiWindow.hide();
-        }
-      }, 100);
-
-    });
-  }, 100);
+    // $("textarea").focusout(function (evt) {
+    //   evt.preventDefault();
+    //   setTimeout(function () {
+    //     console.log($(".CodeMirror-focused").is(":visible"));
+    //     console.log('out of focus');
+    //     if ($(".CodeMirror-focused").length == 0) {
+    //       tuiWindow.hide();
+    //     }
+    //   }, 100);
+    //
+    // });
+  }, 3000);
   remote.getCurrentWindow().show();
   tuiWindow.setPosition(remote.getCurrentWindow().getPosition()[0] - 300, remote.getCurrentWindow().getPosition()[1]);
 
@@ -183,18 +183,12 @@ $(document).ready(function () {
     initialEditType: 'markdown',
     height: '300px',
     width: '200px',
-    events: {
-      change: function(evt){
-        tuiWindow.webContents.send('get_data_write', editor.getValue());
-      }
-    },
     exts: ['scrollSync', 'uml', {
       name: 'chart',
       maxWidth: 200,
       maxHeight: 300
     }, 'mark', 'table', 'taskCounter']
   });
-
 
   var stack = [];
   lookForStack(function (err, stackValue) {

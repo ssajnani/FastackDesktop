@@ -18,6 +18,7 @@ body * {
 }
 
 
+
 #fastack {
     font-size: 40px;
     color: rgba(255,255,255,0.9);
@@ -77,7 +78,7 @@ hr {
 .tui-editor-defaultUI {
     display: block!important;
     margin: 0 auto;
-    width: 80%;
+    width: 100%;
 }
 
 
@@ -347,6 +348,9 @@ input[type=number] {
 .te-mode-switch-section {
     display: none!important;
 }
+.te-toolbar-section{
+    display: none!important;
+}
 
 /* Mark input boxes that gets an error on validation: */
 input.invalid {
@@ -367,6 +371,9 @@ input.invalid {
 }
 
 #editSection *{
+    -webkit-app-region:no-drag!important;
+}
+#editSectionViewer *{
     -webkit-app-region:no-drag!important;
 }
 
