@@ -4,10 +4,14 @@ var CryptoJS = require("crypto-js");
 var cryptoHelper = require('./crypto_helper');
 var async = require('async');
 var GitHub = require('github-api');
+var ls = require('local-storage');
 var Repository = require('github-api/dist/components/Repository');
 var gh = null;
+var temp = require('temp');
+var fs = require('fs');
+var Dropbox = require('dropbox').Dropbox;
 
-
+temp.track();
 
 function createNewGithub(token){
   if (!gh){
@@ -19,7 +23,6 @@ function createNewGithub(token){
 
 
 exports.makeRepo = function(token, repoName, privateRepos, callback){
-  createNewGithub(token);
   fetch("https://api.github.com/user/repos", {
     method: 'POST',
     headers: {
@@ -48,7 +51,6 @@ exports.makeRepo = function(token, repoName, privateRepos, callback){
 }
 
 exports.getPlan = function(token, callback){
-  createNewGithub(token);
   fetch("https://api.github.com/user", {
     method: 'GET',
     headers: {
@@ -79,7 +81,6 @@ exports.getProfile = function(token, callback){
 };
 
 exports.getPlan = function(token, callback){
-  createNewGithub(token);
   this.getProfile(token, function(err, profile){
     if (err){
       return callback(err);
@@ -90,7 +91,6 @@ exports.getPlan = function(token, callback){
 };
 
 exports.getUsername = function(token, callback){
-  createNewGithub(token);
   this.getProfile(token, function(err, profile){
     if (err){
       return callback(err);
@@ -102,7 +102,6 @@ exports.getUsername = function(token, callback){
 
 
 exports.getContent = function(token, username, filepath, repoName, callback){
-  createNewGithub(token);
   fetch("https://api.github.com/repos/" + username + "/" + repoName + "/contents/" + filepath, {
     method: 'GET',
     headers: {
@@ -112,9 +111,10 @@ exports.getContent = function(token, username, filepath, repoName, callback){
     const isValid = response.status < 400;
     const body = response._bodyInit;
     return response.json().then((json) => {
+      console.log(json);
       if (isValid) {
         json['repoName'] = repoName;
-        return callback(null, json)
+        return callback(null, json);
       } else {
         return callback(json.message, null);
       }
@@ -123,23 +123,26 @@ exports.getContent = function(token, username, filepath, repoName, callback){
 }
 
 exports.checkFastackRepoExists = function(token, username, callback){
-  createNewGithub(token);
-  fetch("https://api.github.com/user/repos?visibility=all&affiliation=owner", {
+  fetch("https://api.github.com/user/repos?affiliation=owner", {
     method: 'GET',
     headers: {
       'Authorization' : 'token ' + token,
+      'affiliation': 'owner'
     }
   })
     .then((response) => {
+      console.log(response);
       const isValid = response.status < 400;
       const body = response._bodyInit;
       response.json().then((json) => {
         if (isValid) {
           var nameArray = json.map(function(item) { return item.name});
+          console.log(json);
           var temp = this;
           var found = false;
           async.map(nameArray, async.apply(this.getContent, token, username, ""), function(err, contentArray){
             for (var repoCount = 0; repoCount < contentArray.length; repoCount++){
+              console.log(contentArray);
               for (var fileCount = 0; fileCount < contentArray[repoCount].length; fileCount++) {
                 if (contentArray[repoCount][fileCount].name === username) {
                   found = true;
@@ -164,7 +167,6 @@ exports.checkFastackRepoExists = function(token, username, callback){
 }
 
 exports.checkFileExists = function(token, username, repoName, folderLevel, filename, callback){
-  createNewGithub(token);
   this.getContent(token, username, folderLevel, repoName, function(err, contentArray){
     if (err){
       return callback(err, "");
@@ -181,25 +183,34 @@ exports.checkFileExists = function(token, username, repoName, folderLevel, filen
 
 
 exports.createFile = function(token, username, repoName, filename, fileContent, callback){
-  createNewGithub(token);
-  fetch("https://api.github.com/repos/" + username + "/" + repoName + "/contents/" + filename, {
-    method: 'PUT',
-    headers: {
-      'Authorization': 'token ' + token,
-    },
-    body: JSON.stringify({
-      'content': btoa(fileContent),
-      'message': filename
-    })
-  }).then((response) => {
-    const isValid = response.status < 400;
-    const body = response._bodyInit;
-    return response.json().then((json) => {
-      if (isValid) {
-        return callback(null, json);
-      } else {
-        return callback(json.message, null);
-      }
+
+  var create_url = "https://api.github.com/repos/" + username + "/" + repoName + "/contents/" + filename
+  var auth_header = "token " + token;
+  if (ls('platform') === "Dropbox"){
+    var dropbox = new Dropbox({accessToken: token});
+    dropbox.filesAlphaUpload({contents: fileContent, path: filename});
+    return callback(null, "Successfully wrote " + filename);
+  } else {
+    fetch(create_url, {
+      method: 'PUT',
+      headers: {
+        'Authorization': auth_header,
+      },
+      body: JSON.stringify({
+        'content': btoa(fileContent),
+        'message': filename
+      })
+    }).then((response) => {
+      const isValid = response.status < 400;
+      const body = response._bodyInit;
+      return response.json().then((json) => {
+        if (isValid) {
+          return callback(null, json);
+        } else {
+          return callback(json.message, null);
+        }
+      });
     });
-  });
+  }
+
 };

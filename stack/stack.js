@@ -22,7 +22,7 @@ $(document).ready(function () {
   function getCreateSettings(callback) {
     githubFunctions.checkFileExists(ls('token'), ls('username'), ls('repoName'), "", "settings", function (err, contentArray) {
       if (err == null && contentArray === "") {
-        githubFunctions.createFile(ls('token'), ls('username'), ls('repoName'), "settings", base64.encode(JSON.stringify(settings)), function (err, result) {
+        githubFunctions.createFile(ls('token'), ls('username'), ls('repoName'), "settings", JSON.stringify(settings), function (err, result) {
           if (err) {
             $('#errorreponame').text("Cannot create a settings file in the repository: " + err.message);
             return callback(err.message, null)
@@ -36,7 +36,7 @@ $(document).ready(function () {
             $('#errorreponame').text("Cannot get a settings file from the repository: " + err.message)
             return callback(err.message, null);
           } else {
-            return callback(null, JSON.parse(base64.decode(settingsResults['content'])));
+            return callback(null, JSON.parse(atob(settingsResults['content'])));
           }
         });
       }
@@ -110,6 +110,7 @@ $(document).ready(function () {
   }
 
   function setGlobalVariables(settingsObject) {
+    console.log(settingsObject);
     globalShortcut.register(settingsObject.openClose, function () {
       if (remote.getCurrentWindow().isVisible()) {
         remote.getCurrentWindow().hide();
@@ -153,14 +154,22 @@ $(document).ready(function () {
     hasShadow: false
   });
   tuiWindow.loadURL(`file://${path.join(__dirname, './tui_viewer.html')}`);
+  tuiWindow.setAlwaysOnTop(true);
+  $('body').on('keydown', '.CodeMirror-focused', function(e) {
+    if (e.which == 9) {
+      e.preventDefault();
+      $('#submitTask').focus();
+      $('#submitTask').trigger('hover');
+    }
+  });
   setTimeout(function () {
     console.log($("textarea"));
     $("textarea").focus(function (evt) {
       evt.preventDefault();
       if ($(".CodeMirror-focused").length > 0) {
-        console.log('focused');
         tuiWindow.showInactive();
       }
+
     });
     $("textarea").focusout(function (evt) {
       evt.preventDefault();
@@ -170,10 +179,10 @@ $(document).ready(function () {
         if ($(".CodeMirror-focused").length == 0) {
           tuiWindow.hide();
         }
-      }, 100);
+      }, 10);
 
     });
-  }, 100);
+  }, 10);
   remote.getCurrentWindow().show();
   tuiWindow.setPosition(remote.getCurrentWindow().getPosition()[0] - 300, remote.getCurrentWindow().getPosition()[1]);
 

@@ -79,68 +79,72 @@ $(document).ready(function () {
   }
 
 
-
-  $('#RepoNameSubmit').on('submit', function (evt) {
-    evt.preventDefault();
-    var repoName = $("#reponame")[0].value;
-    $('#errorreponame').text("");
-    var reRepo = /^[A-Za-z0-9_.-]+$/;
-    if (repoName === "" && !ls("repoName")) {
-      errorLog("Repository name cannot be empty.");
-    } else if (!reRepo.test(repoName) && !ls("repoName")) {
-      errorLog("Repository name can only contain: upper/lower case alphabets, underscores, periods, and dashes.");
-    } else if ((!ls("repoName") || $('#encstackdata').prop('checked')) && $('#stackpass').val() === "") {
-      errorLog("Stack password cannot be empty.");
-    } else {
-      var password = $('#stackpass').val();
-      if (!ls("repoName")){
-        githubFunctions.getPlan(ls('token'), function (err, plan) {
-          if (plan.hasOwnProperty('private_repos')) {
-            var privateRepo = false;
-            if (plan.private_repos > 0) {
-              privateRepo = true;
-            }
-            githubFunctions.makeRepo(ls('token'), repoName, privateRepo, function (err, result) {
-              if (err) {
-                errorLog("Repository creation failed: Ensure a repository with the same name does not exist.");
-              } else {
-                var fileContent = "";
-                if ($('#encstackdata').prop('checked')){
-                  var salt = randomBytes(128).toString();
-                  var randomString = cryptoHelper.generateRandomNumberOfLength(128);
-                  var hashed = cryptoHelper.hashPassword(password, salt);
-                  var saltEncrypt = cryptoHelper.encrypt(salt, password);
-                  var randomNumHashEncrypt = cryptoHelper.encrypt(randomString + hashed.hash.toString(), password);
-                  fileContent = saltEncrypt + "\n" + randomNumHashEncrypt;
-                }
-
-                githubFunctions.createFile(ls('token'), ls('username'), repoName, ls('username'), fileContent, function (err, result) {
-                  if (err) {
-                    $('#errorreponame').text("Cannot create an identifier file in the repository: " + err);
-                  } else {
-                    ls('stackPassword', password);
-                    ls('repoName', repoName);
-                    window.location.replace("./stack.html");
-                  }
-                });
-              }
-            });
-          }
-        });
+  if (ls('platform') === "Github"){
+    $('#RepoNameSubmit').on('submit', function (evt) {
+      evt.preventDefault();
+      var repoName = $("#reponame")[0].value;
+      $('#errorreponame').text("");
+      var reRepo = /^[A-Za-z0-9_.-]+$/;
+      if (repoName === "" && !ls("repoName")) {
+        errorLog("Repository name cannot be empty.");
+      } else if (!reRepo.test(repoName) && !ls("repoName")) {
+        errorLog("Repository name can only contain: upper/lower case alphabets, underscores, periods, and dashes.");
+      } else if ((!ls("repoName") || $('#encstackdata').prop('checked')) && $('#stackpass').val() === "") {
+        errorLog("Stack password cannot be empty.");
       } else {
-        var encryptSecrets = ls("encryptedSecret").split(/\n/);
-        var salt = cryptoHelper.decrypt(encryptSecrets[0], password);
-        var randHash = cryptoHelper.decrypt(encryptSecrets[1], password);
-        var hashedPass = cryptoHelper.hashPassword(password, salt);
-        if (randHash.endsWith(hashedPass.hash.toString())){
-          ls('stackPassword', password);
-          window.location.replace("./stack.html");
-        } else {
-          errorLog("An invalid password was provided.")
-        }
-      }
+        var password = $('#stackpass').val();
+        if (!ls("repoName")){
+          githubFunctions.getPlan(ls('token'), function (err, plan) {
+            if (plan.hasOwnProperty('private_repos')) {
+              var privateRepo = false;
+              if (plan.private_repos > 0) {
+                privateRepo = true;
+              }
+              githubFunctions.makeRepo(ls('token'), repoName, privateRepo, function (err, result) {
+                if (err) {
+                  errorLog("Repository creation failed: Ensure a repository with the same name does not exist.");
+                } else {
+                  var fileContent = "";
+                  if ($('#encstackdata').prop('checked')){
+                    var salt = randomBytes(128).toString();
+                    var randomString = cryptoHelper.generateRandomNumberOfLength(128);
+                    var hashed = cryptoHelper.hashPassword(password, salt);
+                    var saltEncrypt = cryptoHelper.encrypt(salt, password);
+                    var randomNumHashEncrypt = cryptoHelper.encrypt(randomString + hashed.hash.toString(), password);
+                    fileContent = saltEncrypt + "\n" + randomNumHashEncrypt;
+                  }
 
-    }
-  });
+                  githubFunctions.createFile(ls('token'), ls('username'), repoName, ls('username'), fileContent, function (err, result) {
+                    if (err) {
+                      $('#errorreponame').text("Cannot create an identifier file in the repository: " + err);
+                    } else {
+                      ls('stackPassword', password);
+                      ls('repoName', repoName);
+                      window.location.replace("./stack.html");
+                    }
+                  });
+                }
+              });
+            }
+          });
+        } else {
+          var encryptSecrets = ls("encryptedSecret").split(/\n/);
+          var salt = cryptoHelper.decrypt(encryptSecrets[0], password);
+          var randHash = cryptoHelper.decrypt(encryptSecrets[1], password);
+          var hashedPass = cryptoHelper.hashPassword(password, salt);
+          if (randHash.endsWith(hashedPass.hash.toString())){
+            ls('stackPassword', password);
+            window.location.replace("./stack.html");
+          } else {
+            errorLog("An invalid password was provided.")
+          }
+        }
+
+      }
+    });
+  } else if (ls('platform') === "Dropbox"){
+
+  }
+
 });
 

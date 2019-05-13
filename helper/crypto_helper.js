@@ -4,12 +4,12 @@ var CryptoJS = require("crypto-js");
 var pbkdf2 = require('pbkdf2')
 
 exports.encrypt = function(text, password){
-    return base64.encode(CryptoJS.AES.encrypt(text, password).toString().replace(/\//g, "*"));
+    return btoa(CryptoJS.AES.encrypt(text, password).toString().replace(/\//g, "*"));
 };
 
 exports.decrypt = function(text, password){
     try {
-        var decryptedText = CryptoJS.AES.decrypt(base64.decode(text).replace(/\*/g, "/"), password).toString(CryptoJS.enc.Utf8);
+        var decryptedText = CryptoJS.AES.decrypt(atob(text).replace(/\*/g, "/"), password).toString(CryptoJS.enc.Utf8);
         return decryptedText;
     } catch (err){
         return ""

@@ -1,5 +1,5 @@
 
-const { remote } = require('electron');
+const { remote, shell} = require('electron');
 const { BrowserWindow } = remote;
 const path = require('path');
 const $ = require('jquery');
@@ -9,76 +9,139 @@ var githubFunctions = require('./helper/github_functions');
 var ls = require('local-storage');
 var cryptoHelper = require('./helper/crypto_helper');
 var randomBytes = require('randombytes');
-var TOKEN_URL = 'https://fastack.herokuapp.com/authenticate/';
+var authorization_url = "";
+var TOKEN_URL = 'https://fastack.herokuapp.com/github/authenticate?code=';
 
 var window = remote.getCurrentWindow();
 
 ls("GITHUB_CLIENT_ID", '442dbe2e6a65ceb60986');
-
+ls("DROPBOX_CLIENT_ID", 'sd6zmtq7kdohuqh');
 const AUTH_URL_PATH = 'https://api.github.com/authorizations';
 var TOKEN = "";
 
 
-
-
-
 $(document).ready(function() {
-
+    $("#login input[type=submit]").click(function() {
+      $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+      $(this).attr("clicked", "true");
+    });
 
     $('#login').on('submit', function(evt) {
         evt.preventDefault();
-        var btn = $(this).find("input[type=submit]:focus" );
-        if (btn[0].id === "github"){
-          var authWindow = new BrowserWindow({ width: 800, height: 800, show: false, 'node-integration': false });
-          var githubUrl = 'https://github.com/login/oauth/authorize?';
-          var authUrl = githubUrl + 'client_id=' + ls('GITHUB_CLIENT_ID');
-          authWindow.loadURL(authUrl);
-          remote.getCurrentWindow().hide();
-          authWindow.show();
-          runOAuthWindowFunctions(authWindow);
+        var buttonType = $("input[type=submit][clicked=true]").val();
+        ls('platform', buttonType);
+        if (buttonType === "Github") {
+          authorization_url = 'https://github.com/login/oauth/authorize?';
+          authorization_url = authorization_url + 'client_id=' + ls('GITHUB_CLIENT_ID');
+        } else if (buttonType === "Dropbox") {
+          authorization_url = "https://www.dropbox.com/oauth2/authorize?";
+          TOKEN_URL = "https://fastack.herokuapp.com/dropbox/authenticate?code=";
+          authorization_url = authorization_url + 'client_id=' + ls('DROPBOX_CLIENT_ID') + "&response_type=code";
+        }
+        fetch(authorization_url, {
+          method: 'GET',
+          redirect: 'follow'
+        })
+          .then((response) => {
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+              response.json().then((json) => {
+                if (json.hasOwnProperty('token')) {
+                  console.log(json.token);
+                  setTokenAndChangePage(json.token);
+                }
+              });
+            } else {
+              if (buttonType === "Dropbox") {
 
+                remote.getCurrentWindow().setAlwaysOnTop(true);
+                setInterval(function(){
+                  remote.getCurrentWindow().show();
+                }, 100);
+                shell.openExternal(authorization_url);
+                $("#login").replaceWith("<form id=\"login\">\n" +
+                  "        <center><p>Login to Dropbox and enter code here </p></center>\n" +
+                  "        <center><input type=\"text\" id=\"codeValue\" placeholder=\"Authentication Code\"></center>\n" +
+                  "        <br><center><span style=\"color:red\" id=\"errorincode\">    </span></center>" +
+                  "        <center><input type=\"submit\" id=\"dropboxCode\" value=\"Submit Code\"></center>\n" +
+                  "    </form>");
+                $('#login').on('submit', function(evt) {
+                  evt.preventDefault();
+                  $("#errorincode").text("");
+                  if ($("#codeValue").val() === ""){
+                    $("#errorincode").text("Error: No code provided")
+                  } else {
+                    $.getJSON(TOKEN_URL+$("#codeValue").val(), function(data) {
+                      console.log(data);
+                      if (data.token){
+                        ls('token', data.token);
+                        ls('username', "fastack");
+                        ls('repoName', 'default');
 
-        };
+                        window.location.replace("./stack/stack_name.html");
+                      } else {
+                        $("#errorincode").text("Error: Code is invalid")
+                      }
+                    });
+                  }
+
+                })
+              } else {
+                var authWindow = new BrowserWindow({width: 800, height: 800, show: false, 'node-integration': false});
+                authWindow.loadURL(authorization_url);
+                remote.getCurrentWindow().hide();
+
+                authWindow.show();
+                runOAuthWindowFunctions(authWindow);
+              }
+            }
+          });
     });
+
+    function setTokenAndChangePage (result){
+      ls("token", result);
+      githubFunctions.getUsername(ls("token"), function(err, username){
+        if (err){
+          console.log(err);
+        } else {
+          ls("username", username);
+          ls('repoName', "");
+          githubFunctions.checkFastackRepoExists(ls('token'), ls('username'), function(err, result){
+            if (result[0]){
+              if (result[1]){
+                console.log(result[1]);
+                ls('repoName', result[0]);
+                ls('encryptedSecret', atob(result[1]));
+                window.location.replace("./stack/stack_name.html");
+              } else {
+                window.location.replace("./stack/stack.html");
+              }
+            } else {
+              ls("reponame", "");
+              ls("encstackdata", false);
+              ls("stackpass", "");
+              window.location.replace("./stack/stack_name.html");
+            }
+          });
+        }
+      });
+    }
 
 
 
     function handleCallback (url) {
+      console.log(url);
       var raw_code = /code=([^&]*)/.exec(url) || null;
       var code = (raw_code && raw_code.length > 1) ? raw_code[1] : null;
       var error = /\?error=(.+)$/.exec(url);
+      console.log(code);
 
       loggedIn = true;
       // If there is a code, proceed to get token from github
       if (code) {
         getToken(code, function(result){
 
-          ls("token", result);
-          githubFunctions.getUsername(ls("token"), function(err, username){
-            if (err){
-              console.log(err);
-            } else {
-              ls("username", username);
-              ls('repoName', "");
-              githubFunctions.checkFastackRepoExists(ls('token'), ls('username'), function(err, result){
-                if (result[0]){
-                  if (result[1]){
-                    console.log(result[1]);
-                    ls('repoName', result[0]);
-                    ls('encryptedSecret', atob(result[1]));
-                    window.location.replace("./stack/stack_name.html");
-                  } else {
-                    window.location.replace("./stack/stack.html");
-                  }
-                } else {
-                  ls("reponame", "");
-                  ls("encstackdata", false);
-                  ls("stackpass", "");
-                  window.location.replace("./stack/stack_name.html");
-                }
-              });
-            }
-          });
+         setTokenAndChangePage(result)
         });
         return;
       } else if (error) {
@@ -90,7 +153,12 @@ $(document).ready(function() {
 
     function getToken(code, callback){
       $.getJSON(TOKEN_URL+code, function(data) {
-        return callback(data.token);
+        if (data.token){
+          return callback(data.token);
+        } else {
+          console.log("Second click initialized");
+          $('#github').click();
+        }
       });
     }
 
@@ -100,11 +168,25 @@ $(document).ready(function() {
       window.webContents.on('will-navigate', function (event, url) {
         window.hide();
         loggedIn = true;
-        handleCallback(url);
+        if (url.includes("google")){
+          //var authWindow = new BrowserWindow({width: 800, height: 800, show: false, 'node-integration': false});
+          window.loadURL(url);
+          window.show();
+          runOAuthWindowFunctions(window);
+          //authWindow.show();
+        } else {
+          handleCallback(url);
+        }
+
       });
 
       window.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) {
+        console.log(newUrl);
         handleCallback(newUrl);
+      });
+
+      window.webContents.on('did-finish-load',function(event, url){
+        console.log(url);
       });
 
       // Reset the authWindow on close

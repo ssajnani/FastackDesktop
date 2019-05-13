@@ -164,8 +164,8 @@ nobr {
 #github:hover, #dropbox:hover, #google:hover {
     align-self: stretch;
     display: block;
-    width: 70%;
-    height: 12%;
+    width: 80%;
+    height: 10%;
     background: black;
     outline: none;
     padding-top: 4%;
