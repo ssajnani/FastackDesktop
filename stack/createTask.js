@@ -16,6 +16,17 @@ var window = BrowserWindow.getFocusedWindow();
 
 
 $(document).ready(function () {
+  function zeroPadded(val) {
+    if (val >= 10)
+      return val;
+    else
+      return '0' + val;
+  }
+  var d = new Date();
+  var dateString = d.getFullYear()+"-"+zeroPadded(d.getMonth() + 1)+"-"+zeroPadded(d.getDate())+"T"+zeroPadded(d.getHours())+":"+zeroPadded(d.getMinutes());
+  d = new Date(dateString);
+  $("#startDate").val(dateString);
+  $("#compDate").val(dateString);
   $("body").css("background-color", "transparent");
   $("ul li:nth-child(2)").append("<span> - 2nd!</span>");
 
@@ -31,9 +42,9 @@ $(document).ready(function () {
           }
         });
       } else {
-        githubFunctions.getContent(ls('token'), ls('username'), contentArray, ls('repoName'), function (err, settingsResults) {
+        githubFunctions.getContent(ls('token'), ls('username'), "settings", ls('repoName'), function (err, settingsResults) {
           if (err) {
-            $('#errorreponame').text("Cannot get a settings file from the repository: " + err.message)
+            $('#errorreponame').text("Cannot get a settings file from the repository: " + err.message);
             return callback(err.message, null);
           } else {
             return callback(null, JSON.parse(atob(settingsResults['content'])));
@@ -110,7 +121,6 @@ $(document).ready(function () {
   }
 
   function setGlobalVariables(settingsObject) {
-    console.log(settingsObject);
     globalShortcut.register(settingsObject.openClose, function () {
       if (remote.getCurrentWindow().isVisible()) {
         remote.getCurrentWindow().hide();
@@ -163,7 +173,6 @@ $(document).ready(function () {
     }
   });
   setTimeout(function () {
-    console.log($("textarea"));
     $("textarea").focus(function (evt) {
       evt.preventDefault();
       if ($(".CodeMirror-focused").length > 0) {
@@ -174,8 +183,6 @@ $(document).ready(function () {
     $("textarea").focusout(function (evt) {
       evt.preventDefault();
       setTimeout(function () {
-        console.log($(".CodeMirror-focused").is(":visible"));
-        console.log('out of focus');
         if ($(".CodeMirror-focused").length == 0) {
           tuiWindow.hide();
         }
@@ -213,13 +220,121 @@ $(document).ready(function () {
       stack = stackValue;
     }
     if (stack.length === 0) {
-      $('#createtask').on('click', function () {
-        console.log("GOTHERE");
-      });
+      
     } else {
 
     }
 
+  });
+
+ 
+  $('#tname').on('input', function(){
+    $("#nameError").html("<br><br>");
+    if ($('#tname').val() == ""){
+      $("#nameError").html("Error: Task name is required.");
+    }
+  });
+  $('#hours, #minutes').on('input', function(){
+    $("#timeError").html("<br><br>");
+    var testHours = parseInt($('#hours').val());
+    var testMins = parseInt($('#minutes').val());
+    if (testHours < 0 || testHours > 1000 || !/\d/.test($("#hours").val()) || testMins < 0 || testMins > 59 || !/\d/.test($("#minutes").val())){
+      $("#timeError").html("Error: hours need to be between 0 and 1000 and minutes between 0 and 59");
+    }
+  });
+  $('#priority').on('input', function(){
+    $("#priorityError").html("<br><br>");
+    var testPri = parseInt($('#priority').val());
+    if (testPri < 1 || testPri > 100 || !/\d/.test($("#priority").val())){
+      $("#priorityError").html("Error: priority needs to be between 1 and 100.");
+    }
+  });
+  $('#startDate').on('input', function(){
+    $("#startError").html("<br><br>");
+    $("#compError").html("<br><br>");
+    var testDate = new Date($('#startDate').val()).getTime();
+    var compDate = new Date($('#compDate').val()).getTime();
+    if (testDate < d.getTime()){
+      $("#startError").html("Error: task start date cannot be earlier than current date.");
+    }
+    if (compDate/1000/60 < testDate/1000/60) {
+      $("#compError").html("Error: task completion date cannot be earlier than the start date.");
+    }
+  });
+  $('#compDate').on('input', function(){
+    $("#compError").html("<br><br>");
+    var testDate = new Date($('#startDate').val()).getTime();
+    var compDate = new Date($('#compDate').val()).getTime()
+    if (compDate < d.getTime()){
+      $("#compError").html("Error: task completion date cannot be earlier than current date.");
+    }
+    if (compDate/1000/60 < testDate/1000/60) {
+      $("#compError").html("Error: task completion date cannot be earlier than the start date.");
+    }
+  });
+  $('#tags').on('input', function(){
+    $("#tagError").html("<br><br>");
+    var test = $('#tags').val();
+    if (!/^(#[a-z0-9]+\,[\s]*)*(#[a-z0-9]+[\s]*){0,1}$/gi.test(test)){
+      $("#tagError").html("Error: Tags should be formatted as follows \"#tag1, #tag2, #tag3\".");
+    }
+  });
+
+  $('#createNewTask').on('submit', function (evt) {
+    evt.preventDefault();
+    var taskName = $("#tname").val();
+    var startDate = $("#startDate").val();
+    var completionDate = $("#compDate").val();
+    var timeHours = parseInt($("#hours").val());
+    var timeMins = parseInt($("#minutes").val());
+    var priority = parseInt($("#priority").val());
+    var description = $("#description").val(); 
+    var tags = $("#tags").val();
+    var notes = $("textarea")[1].value; 
+    $("#startError").html("<br><br>");
+    $("#compError").html("<br><br>");
+    var testDate = new Date($('#startDate').val()).getTime();
+    var compDate = new Date($('#compDate').val()).getTime();
+    $("#error").html("<br><br>");
+    var count = 0;
+    if (taskName == ""){
+      var nameError = "Error: Task name is required.";
+      $("#nameError").html(nameError);
+      count++;
+    }
+    if (timeHours < 0 || timeHours > 1000 || !/\d/.test($("#hours").val()) || timeMins < 0 || timeMins > 59 || !/\d/.test($("#minutes").val())){
+      var timeError = "Error: hours need to be between 0 and 1000 and minutes between 0 and 59";
+      $("#timeError").html(timeError);
+      count++;
+    }
+    if (priority < 1 || priority > 100 || !/\d/.test($("#priority").val())){
+      var priError = "Error: priority needs to be between 1 and 100.";
+      $("#priorityError").html(priError);
+      count++;
+    }
+    if (!/^(#[a-z0-9]+\,[\s]*)*(#[a-z0-9]+[\s]*){0,1}$/gi.test(tags)){
+      var tagError = "Error: Tags should be formatted as follows \"#tag1, #tag2, #tag3\".";
+      $("#tagError").html(tagError);
+      count++;
+    }
+    if (testDate < d.getTime()){
+      $("#startError").html("Error: task start date cannot be earlier than current date.");
+      count++;
+    }
+    if (compDate < d.getTime()){
+      $("#compError").html("Error: task completion date cannot be earlier than current date.");
+      count++;
+    }
+    if (compDate/1000/60 < testDate/1000/60) {
+      $("#compError").html("Error: task completion date cannot be earlier than the start date.");
+      count++;
+    }
+    if (count > 0){
+      $("#error").html("Invalid entries were found that need to be fixed before proceeding.");
+    } else {
+
+    }
+    //window.location.replace("./stack.html");
   });
   var settings = {
     "openClose": "alt+z",
@@ -230,6 +345,7 @@ $(document).ready(function () {
     if (!err && result !== "success") {
       settings = result;
     }
+    console.log(result);
     setGlobalVariables(result);
     if (result.skipTutorial !== true) {
 

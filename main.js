@@ -57,6 +57,7 @@ app.on('ready', () => {
   })
 });
 
+//Hide/Show on toggle
 const toggleWindow = () => {
   if (window.isVisible()) {
     window.hide()
@@ -65,6 +66,7 @@ const toggleWindow = () => {
   }
 };
 
+//Position window at the correct location according to the tray
 var first = 0;
 const showWindowbef = () => {
   const trayPos = tray.getBounds();
@@ -77,7 +79,7 @@ const showWindowbef = () => {
     } else {
       console.log(trayPos);
       x = Math.round(trayPos.x + (trayPos.width / 2) - (windowPos.width / 2));
-      y = Math.round(trayPos.height +500)
+      y = Math.round(trayPos.y - 500)
     }
     first++;
     window.setPosition(x, y, false);

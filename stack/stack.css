@@ -1,0 +1,82 @@
+body {
+    background-color: rgba(100, 129, 162, 0.0);
+    margin: 0;
+    padding: 0;
+
+}
+body * {
+    -webkit-app-region:no-drag!important;
+}
+
+.draggable {
+    -ms-overflow-style: scrollbar;
+    -webkit-app-region:drag;
+}
+
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+
+@font-face {
+    font-family: myFirstFont;
+    src: url(../fonts/Alcubierre.otf);
+}
+
+/* Start of framework code */
+*,*::after,*::before{box-sizing:border-box}
+html,body{height:100%}
+.container{min-height:100%;display:flex;flex-direction:column}
+.stack,.panel{display:flex}
+.stack{flex-direction:column}
+/* End of framework code */
+
+body
+{
+  font-family: Helvetica, Arial, sans-serif;
+  font-size:26px;
+}
+
+.panel
+{
+  flex:1 0 4rem;
+  padding:1rem;
+  border-radius: 25px;
+  background: #E3CDA4;
+  color:#2F343B;
+  margin-bottom:.5rem;
+}
+
+.s1 > .panel:last-of-type
+{
+  margin-bottom:0;
+}
+
+.s1
+{
+  flex:1;
+  padding:.5rem;
+  background: transparent;
+}
+
+.s2
+{
+  flex: 3 0 12rem;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+@media all and (min-width:601px)
+{
+  .s2
+  {
+    flex:1 0 4rem;
+    flex-direction:row;
+  }
+
+  .s2 > .panel
+  {
+    max-width: calc(33% - .25rem);
+  }
+}

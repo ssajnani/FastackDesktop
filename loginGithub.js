@@ -18,9 +18,9 @@ ls("GITHUB_CLIENT_ID", '442dbe2e6a65ceb60986');
 ls("DROPBOX_CLIENT_ID", 'sd6zmtq7kdohuqh');
 const AUTH_URL_PATH = 'https://api.github.com/authorizations';
 var TOKEN = "";
-
-
+/* Initial Page with github, dropbox, and google drive options */
 $(document).ready(function() {
+    // 
     $("#login input[type=submit]").click(function() {
       $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
       $(this).attr("clicked", "true");
@@ -108,13 +108,12 @@ $(document).ready(function() {
           ls('repoName', "");
           githubFunctions.checkFastackRepoExists(ls('token'), ls('username'), function(err, result){
             if (result[0]){
+              ls('repoName', result[0]);
               if (result[1]){
-                console.log(result[1]);
-                ls('repoName', result[0]);
                 ls('encryptedSecret', atob(result[1]));
                 window.location.replace("./stack/stack_name.html");
               } else {
-                window.location.replace("./stack/stack.html");
+                window.location.replace("./stack/createTask.html");
               }
             } else {
               ls("reponame", "");

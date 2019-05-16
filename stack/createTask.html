@@ -1,0 +1,84 @@
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src='../node_modules/markdown-it/dist/markdown-it.js'></script>
+    <script src="../node_modules/to-mark/dist/to-mark.js"></script>
+    <script src="../node_modules/tui-code-snippet/dist/tui-code-snippet.js"></script>
+    <script src="../node_modules/codemirror/lib/codemirror.js"></script>
+    <script src="../node_modules/squire-rte/build/squire-raw.js"></script>
+    <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
+    <script src="../node_modules/tui-editor/dist/tui-editor-Editor.js"></script>
+    <script src="../node_modules/tui-chart/dist/tui-chart.js"></script>
+    <script src="../node_modules/tui-editor/dist/tui-editor-extTable.js"></script>
+    <script src="../node_modules/tui-editor/dist/tui-editor-extChart.js"></script>
+    <script src="../node_modules/plantuml-encoder/lib/plantuml-encoder.js"></script>
+    <script src="../node_modules/tui-editor/dist/tui-editor-extUML.js"></script>
+    <link rel="stylesheet" href="../node_modules/tui-editor/dist/tui-editor.css">
+    <link rel="stylesheet" href="../node_modules/tui-chart/dist/tui-chart.css">
+    <link rel="stylesheet" href="../node_modules/tui-editor/dist/tui-editor-contents.css">
+    <title>FaStack</title>
+    <link rel="stylesheet" type="text/css" href="stackInfo.css">
+</head>
+<body class="draggable">
+
+<div>
+    <div class="rows">
+        <div class="column">
+            <br>
+            <p id="createTaskTitle">New Task</p>
+            <form id="createNewTask">
+                <div class="tab">
+                    <div class="taskInput">
+                        <label for="tname">Task Name </label><br><br>
+                        <input id="tname" type="text" name="taskname">
+                    </div>
+                    <span id="nameError" class="error"><br><br></span>
+                    <div class="taskInput">
+                        <label for="startDate">Start Date</label>
+                        <input id="startDate" type="datetime-local">
+                    </div>
+                    <span id="startError" class="error"><br><br></span>
+                    <div class="taskInput">
+                        <label for="compDate">Completion Date</label>
+                        <input id="compDate" type="datetime-local">
+                    </div>
+                    <span id="compError" class="error"><br><br></span>
+                    <label for="compDate">Estimated Time Required</label><br><br><br>
+                    <div class="centerTaskInput">
+                        <input align="left" id="hours" type="number" value="0" min="0" max="1000"> hours<input align="left" id="minutes" type="number" value="0" min="0" max="59"> minutes<br>
+                    </div>
+                    <span id="timeError" class="error"><br><br></span>
+                    <label for="priority">Priority (Number between 1 and 100)</label><br>
+                    <div class="centerTaskInput">
+                        <input id="priority" align="right" type="number" value="1" min="1" max="100">
+                    </div>
+                    <span id="priorityError" class="error"><br><br></span>
+                    <br>
+                    <div class="taskInput">
+                        <label for="description">Description </label><br><br>
+                        <textarea id="description" class="boxInput" name="description"></textarea><br><br>
+                    </div>
+                    <div class="taskInput">
+                        <label for="tags">Tags </label><br>
+                        <input id="tags" type="text" name="tags">
+                    </div>
+                    <span id="tagError" class="error"><br><br></span>
+                    <div class="taskInput">
+                        <label for="description">Notes </label><br><br><br>
+                        <div id="editSection">
+                        </div>
+                    </div>
+                    <br><br>
+                </div>
+                <span id="error" class="error"><br><br></span>
+                <br>
+                <br>
+                <center><input type="submit" id="submitTask" value="Create Task"></center>
+            </form>
+        </div>
+    </div>
+</div>
+<script charset="utf-8" type="text/javascript" src="./createTask.js"></script>
+
+</body>
+</html>

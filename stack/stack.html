@@ -1,74 +1,14 @@
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <head>
-    <script src="../node_modules/jquery/dist/jquery.js"></script>
-    <script src='../node_modules/markdown-it/dist/markdown-it.js'></script>
-    <script src="../node_modules/to-mark/dist/to-mark.js"></script>
-    <script src="../node_modules/tui-code-snippet/dist/tui-code-snippet.js"></script>
-    <script src="../node_modules/codemirror/lib/codemirror.js"></script>
-    <script src="../node_modules/squire-rte/build/squire-raw.js"></script>
-    <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
-    <script src="../node_modules/tui-editor/dist/tui-editor-Editor.js"></script>
-    <script src="../node_modules/tui-chart/dist/tui-chart.js"></script>
-    <script src="../node_modules/tui-editor/dist/tui-editor-extTable.js"></script>
-    <script src="../node_modules/tui-editor/dist/tui-editor-extChart.js"></script>
-    <script src="../node_modules/plantuml-encoder/lib/plantuml-encoder.js"></script>
-    <script src="../node_modules/tui-editor/dist/tui-editor-extUML.js"></script>
-    <link rel="stylesheet" href="../node_modules/tui-editor/dist/tui-editor.css">
-    <link rel="stylesheet" href="../node_modules/tui-chart/dist/tui-chart.css">
-    <link rel="stylesheet" href="../node_modules/tui-editor/dist/tui-editor-contents.css">
-    <title>FaStack</title>
-    <link rel="stylesheet" type="text/css" href="stackInfo.css">
+  <title>FaStack</title>
+  <link rel="stylesheet" type="text/css" href="./stack.css">
 </head>
 <body class="draggable">
-
-<div>
-    <div class="rows">
-        <div class="column">
-            <br>
-            <p id="createTaskTitle">New Task</p>
-            <form id="createNewTask">
-                <div class="tab">
-                    <div class="taskInput">
-                        <label for="tname">Task Name </label><br><br>
-                        <input id="tname" type="text" name="taskname"><br><br>
-                    </div>
-
-                    <div class="taskInput">
-                        <label for="startDate">Start Date</label>
-                        <input id="startDate" type="datetime-local"><br><br>
-                    </div>
-                    <div class="taskInput">
-                        <label for="compDate">Completion Date</label>
-                        <input id="compDate" type="datetime-local"><br><br>
-                    </div>
-
-                    <label for="compDate">Estimated Time Required</label><br><br><br>
-                    <div class="centerTaskInput">
-                        <input align="center" type="number" placeholder="hours" min="0" max="100">:<input type="number" placeholder="mins" min="0" max="100">
-                    </div>
-                    <br><br><br>
-                    <div class="taskInput">
-                        <label for="description">Description </label><br><br>
-                        <textarea id="description" class="boxInput" name="description"></textarea><br><br>
-                    </div>
-                    <div class="taskInput">
-                        <label for="tags">Tags </label><br><br>
-                        <input id="tags" type="text" name="tags"><br><br>
-                    </div>
-                    <div class="taskInput">
-                        <label for="description">Notes </label><br><br><br>
-                        <div id="editSection">
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <br>
-                <center><input type="submit" id="submitTask" value="Create Task"></center>
-            </form>
-        </div>
+<main class='container'>
+    <div class="stack s1">
+       <div class="panel p1">Panel P1</div>
+       <div class="panel p5">Panel P5</div>
     </div>
-</div>
-<script charset="utf-8" type="text/javascript" src="./stack.js"></script>
-
+</main>
 </body>
 </html>

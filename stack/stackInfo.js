@@ -89,7 +89,7 @@ $(document).ready(function () {
         errorLog("Repository name cannot be empty.");
       } else if (!reRepo.test(repoName) && !ls("repoName")) {
         errorLog("Repository name can only contain: upper/lower case alphabets, underscores, periods, and dashes.");
-      } else if ((!ls("repoName") || $('#encstackdata').prop('checked')) && $('#stackpass').val() === "") {
+      } else if (!ls("repoName") && $('#encstackdata').prop('checked') && $('#stackpass').val() === "") {
         errorLog("Stack password cannot be empty.");
       } else {
         var password = $('#stackpass').val();
@@ -120,7 +120,7 @@ $(document).ready(function () {
                     } else {
                       ls('stackPassword', password);
                       ls('repoName', repoName);
-                      window.location.replace("./stack.html");
+                      window.location.replace("./createTask.html");
                     }
                   });
                 }
@@ -133,8 +133,9 @@ $(document).ready(function () {
           var randHash = cryptoHelper.decrypt(encryptSecrets[1], password);
           var hashedPass = cryptoHelper.hashPassword(password, salt);
           if (randHash.endsWith(hashedPass.hash.toString())){
+            ls('repoName', repoName);
             ls('stackPassword', password);
-            window.location.replace("./stack.html");
+            window.location.replace("./createTask.html");
           } else {
             errorLog("An invalid password was provided.")
           }
