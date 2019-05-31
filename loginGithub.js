@@ -8,6 +8,7 @@ const base64 = require('base-64');
 var githubFunctions = require('./helper/github_functions');
 var ls = require('local-storage');
 var cryptoHelper = require('./helper/crypto_helper');
+var prestack = require('./helper/prestack_functions');
 var randomBytes = require('randombytes');
 var authorization_url = "";
 var TOKEN_URL = 'https://fastack.herokuapp.com/github/authenticate?code=';
@@ -108,12 +109,25 @@ $(document).ready(function() {
           ls('repoName', "");
           githubFunctions.checkFastackRepoExists(ls('token'), ls('username'), function(err, result){
             if (result[0]){
+              console.log(result[0]);
               ls('repoName', result[0]);
               if (result[1]){
                 ls('encryptedSecret', atob(result[1]));
                 window.location.replace("./stack/stack_name.html");
               } else {
-                window.location.replace("./stack/createTask.html");
+                ls('key', null);
+                prestack.lookForStack(function (err, stackValue) {
+                  if (err) {
+                    $('#errorreponame').text("Cannot get the current stack from the repository: " + err.message);
+                  }
+                  ls('stack', stackValue?stackValue:[]);
+                  if (ls('stack').length === 0) {
+                    window.location.replace("./stack/createTask.html");
+                  } else {
+                    window.location.replace("./stack/stack.html");
+                  }
+                });
+                
               }
             } else {
               ls("reponame", "");

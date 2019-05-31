@@ -8,6 +8,7 @@ const base64 = require('base-64');
 var ls = require('local-storage');
 var githubFunctions = require('../helper/github_functions');
 var conversions = require('../helper/conversions');
+var prestack = require('../helper/prestack_functions');
 var randomBytes = require('randombytes');
 var cryptoHelper = require('../helper/crypto_helper');
 
@@ -110,11 +111,14 @@ $(document).ready(function () {
                     var randomString = cryptoHelper.generateRandomNumberOfLength(128);
                     var hashed = cryptoHelper.hashPassword(password, salt);
                     var saltEncrypt = cryptoHelper.encrypt(salt, password);
+                    ls('key', password);
                     var randomNumHashEncrypt = cryptoHelper.encrypt(randomString + hashed.hash.toString(), password);
                     fileContent = saltEncrypt + "\n" + randomNumHashEncrypt;
+                  } else {
+                    ls('key', null);
                   }
 
-                  githubFunctions.createFile(ls('token'), ls('username'), repoName, ls('username'), fileContent, function (err, result) {
+                  githubFunctions.createUpdateFile(ls('token'), ls('username'), repoName, ls('username'), fileContent, function (err, result) {
                     if (err) {
                       $('#errorreponame').text("Cannot create an identifier file in the repository: " + err);
                     } else {
@@ -133,9 +137,18 @@ $(document).ready(function () {
           var randHash = cryptoHelper.decrypt(encryptSecrets[1], password);
           var hashedPass = cryptoHelper.hashPassword(password, salt);
           if (randHash.endsWith(hashedPass.hash.toString())){
-            ls('repoName', repoName);
             ls('stackPassword', password);
-            window.location.replace("./createTask.html");
+            prestack.lookForStack(function (err, stackValue) {
+              if (err) {
+                $('#errorreponame').text("Cannot get the current stack from the repository: " + err.message);
+              }
+              ls('stack', stackValue?stackValue:[]);
+              if (ls('stack').length === 0) {
+                window.location.replace("./createTask.html");
+              } else {
+                window.location.replace("./stack.html");
+              }
+            });
           } else {
             errorLog("An invalid password was provided.")
           }

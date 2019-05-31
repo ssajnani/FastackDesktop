@@ -20,9 +20,9 @@ $(document).ready(function () {
   $("ul li:nth-child(2)").append("<span> - 2nd!</span>");
 
   function getCreateSettings(callback) {
-    githubFunctions.checkFileExists(ls('token'), ls('username'), ls('repoName'), "", "settings", function (err, contentArray) {
+    githubFunctions.checkFileExists(ls('token'), ls('username'), ls('repoName'), "settings", function (err, contentArray) {
       if (err == null && contentArray === "") {
-        githubFunctions.createFile(ls('token'), ls('username'), ls('repoName'), "settings", base64.encode(JSON.stringify(settings)), function (err, result) {
+        githubFunctions.createUpdateFile(ls('token'), ls('username'), ls('repoName'), "settings", base64.encode(JSON.stringify(settings)), function (err, result) {
           if (err) {
             $('#errorreponame').text("Cannot create a settings file in the repository: " + err.message);
             return callback(err.message, null)

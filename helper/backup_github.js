@@ -141,7 +141,7 @@ exports.checkFileExists = function(token, username, repoName, folderLevel, filen
   });
 }
 
-exports.createFile = function(token, username, repoName, filename, fileContent, callback){
+exports.createUpdateFile = function(token, username, repoName, filename, fileContent, callback){
   fetch("https://api.github.com/repos/" + username + "/" + repoName + "/contents/" + filename, {
     method: 'PUT',
     headers: {

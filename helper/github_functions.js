@@ -166,23 +166,19 @@ exports.checkFastackRepoExists = function(token, username, callback){
     });
 }
 
-exports.checkFileExists = function(token, username, repoName, folderLevel, filename, callback){
-  this.getContent(token, username, folderLevel, repoName, function(err, contentArray){
+exports.checkFileExists = function(token, username, repoName, filename, callback){
+  this.getContent(token, username, filename, repoName, function(err, contentArray){
     if (err){
-      return callback(err, "");
+      console.log(err);
+      return callback(null, "");
     }
-    for (var fileCount = 0; fileCount < contentArray.length; fileCount++) {
-      if (contentArray[fileCount].name == filename) {
-        return callback(null, contentArray[fileCount].name);
-      }
-    }
-    return callback(null, "");
+    return callback(null, contentArray);
   });
 }
 
 
 
-exports.createFile = function(token, username, repoName, filename, fileContent, callback){
+exports.createUpdateFile = function(token, username, repoName, filename, fileContent, callback){
 
   var create_url = "https://api.github.com/repos/" + username + "/" + repoName + "/contents/" + filename
   var auth_header = "token " + token;
@@ -191,26 +187,34 @@ exports.createFile = function(token, username, repoName, filename, fileContent, 
     dropbox.filesAlphaUpload({contents: fileContent, path: filename});
     return callback(null, "Successfully wrote " + filename);
   } else {
-    fetch(create_url, {
-      method: 'PUT',
-      headers: {
-        'Authorization': auth_header,
-      },
-      body: JSON.stringify({
-        'content': btoa(fileContent),
-        'message': filename
-      })
-    }).then((response) => {
-      const isValid = response.status < 400;
-      const body = response._bodyInit;
-      return response.json().then((json) => {
-        if (isValid) {
-          return callback(null, json);
-        } else {
-          return callback(json.message, null);
+    this.checkFileExists(token, username, repoName, filename, function (err, exists){
+      var options = {
+        method: 'PUT',
+        headers: {
+          'Authorization': auth_header,
+        },
+        body: {
+          'content': btoa(fileContent),
+          'message': filename
         }
+      };
+      if (exists){
+        options['body']['sha'] = exists.sha;
+      }
+      options['body'] = JSON.stringify(options['body']);
+      fetch(create_url, options).then((response) => {
+        const isValid = response.status < 400;
+        const body = response._bodyInit;
+        return response.json().then((json) => {
+          if (isValid) {
+            return callback(null, json);
+          } else {
+            return callback(json.message, null);
+          }
+        });
       });
-    });
+    })
+    
   }
 
 };
