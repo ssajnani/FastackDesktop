@@ -13,22 +13,42 @@ body * {
     -webkit-app-region:drag;
 }
 
-th {
+table { 
   width: 90%;
+}
+th {
+  text-align:left;
+  font-family: opensans-extrabold;
+}
+
+td {
+  text-align:right;
+  font-size: 95%;
+  font-family: opensans;
 }
 
 ::-webkit-scrollbar {
     display: none;
 }
 
-h3{
+h2{
   padding: 0;
   margin:0;
+  font-size:140%;
 }
 
 @font-face {
     font-family: myFirstFont;
     src: url(../fonts/Alcubierre.otf);
+}
+
+@font-face {
+  font-family: opensans-extrabold;
+  src: url(../fonts/OpenSans-ExtraBold.ttf);
+}
+@font-face {
+  font-family: opensans;
+  src: url(../fonts/OpenSans-Regular.ttf);
 }
 
 /* Start of framework code */

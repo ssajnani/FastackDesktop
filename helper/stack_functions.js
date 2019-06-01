@@ -64,40 +64,41 @@ exports.getRandomTheme = function() {
         }
         });
 }
-
+//<th><h2>${decrypted['taskName'].length>12?decrypted['taskName'].slice(0,12)+"...":decrypted['taskName']}</h2></th>
 exports.generateTaskHTML = function(index, translate, decrypted) {
     return '<div id="t' + index + '" class="task" style="' + translate + '">' +
-            `<table ${index!=0?"style='position:absolute;bottom:10%;'":""}>
+            `<table align="center" ${index!=0?"style='position:absolute;bottom:10%;left:5%;'":""}>
             <tr>
-              <th style="text-align:left;"><h3>${decrypted['taskName'].length>15?decrypted['taskName'].slice(0,15)+"...":decrypted['taskName']}</h3></th>
-              <th><h3>active</h3></th>            
+              <th>${decrypted['taskName'].length>12?'<marquee style="width:80%" scrollamount="5" behavior="scroll" direction="left"><h2>'+decrypted['taskName']+'</h2></marquee>':'<h2>'+decrypted['taskName']+'</h2>'}</th>
+              <th style="text-align:right;"><h2>active</h2></th>            
             </tr>
-            ${index==0?`<tr>
-              <td>Start By: </td>
-              <td>${decrypted['startDate']}</td>
-            </tr>
+            ${index==0?`
             <tr>
-              <td>Complete By: </td>
-              <td>${decrypted['completionDate']}</td>
+              <th>From: </th>
+              <td>${new Date(decrypted['startDate']).toLocaleString().replace(/:00 |,/gi, '')}</td>
             </tr>
             <tr>
-              <td>Created At: </td>
-              <td>${decrypted['creationDate']}<br></td>
+              <th>To: </th>
+              <td>${new Date(decrypted['completionDate']).toLocaleString().replace(/:00 |,/gi, '')}</td>
             </tr>
             <tr>
-              <td>Duration: </td>
+              <th>Duration: </th>
               <td>${decrypted['timeHours']} hours ${decrypted['timeMins']} mins<br></td>
             </tr>
             <tr>
-              <td>Priority: </td>
+              <th>Priority: </th>
               <td>${decrypted['priority']}<br></td>
             </tr>
             <tr>
-              <td>Tags: </td>
+              <th>Tags: </th>
               <td>${decrypted['tags']}<br></td>
             </tr>
+            <tr>
+              <th>Created At: </th>
+              <td>${new Date(decrypted['creationDate']).toLocaleString().replace(/:00 |,/gi, '')}<br></td>
+            </tr>
             </table>
-            </div>`:'</div>'}`;
+            </div>`:'</table></div>'}`;
 }
 
 exports.decryptTask = function(task){
