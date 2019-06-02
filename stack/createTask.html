@@ -32,17 +32,20 @@
                         <label for="tname">Task Name </label><br><br>
                         <input id="tname" type="text" name="taskname">
                     </div>
-                    <span id="nameError" class="error"><br><br></span>
-                    <div class="taskInput">
+                    <span id="nameError" class="error"><br></span>
+                    <div class="taskInput" id="start" style="display:none;">
                         <label for="startDate">Start Date</label>
                         <input id="startDate" type="datetime-local">
                     </div>
-                    <span id="startError" class="error"><br><br></span>
-                    <div class="taskInput">
+                    <div class="taskInput" id="comp" style="display:none;">
                         <label for="compDate">Completion Date</label>
                         <input id="compDate" type="datetime-local">
                     </div>
-                    <span id="compError" class="error"><br><br></span>
+                    <br>
+                    <div class="taskInput">
+                        <input type="checkbox" id="dates"><p style="display:inline">  Add Start and Completion Dates</p> 
+                    </div>
+                    <br>
                     <label for="compDate">Estimated Time Required</label><br><br><br>
                     <div class="centerTaskInput">
                         <input align="left" id="hours" type="number" value="0" min="0" max="1000"> hours<input align="left" id="minutes" type="number" value="0" min="0" max="59"> minutes<br>

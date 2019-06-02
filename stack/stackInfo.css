@@ -17,7 +17,21 @@ body * {
     height: 16px!important;
 }
 
+@font-face {
+    font-family: opensans-extrabold;
+    src: url(../fonts/OpenSans-ExtraBold.ttf);
+  }
+@font-face {
+font-family: opensans-lightbold;
+src: url(../fonts/OpenSans-Semibold.ttf);
+}
 
+@font-face {
+    font-family: opensans;
+    src: url(../fonts/OpenSans-Regular.ttf);
+}
+
+    
 ::-webkit-scrollbar {
     display: none;
 }
@@ -37,7 +51,7 @@ body * {
 
 #createTaskTitle {
     word-spacing: -5px;
-    font-family: myFirstFont;
+    font-family: opensans-extrabold;
     font-size: 30px;
     color: rgba(255,255,255,0.9);
     margin: 15px;
@@ -53,9 +67,19 @@ body * {
     margin: 15px;
 }
 
+input, textarea {
+    font-family: opensans;
+}
+
+p {
+    font-family: opensans-lightbold;
+    color: rgba(255,255,255,0.9);
+    font-size: 90%;
+}
+
 label {
     word-spacing: -1px;
-    font-family: myFirstFont;
+    font-family: opensans-lightbold;
     font-size: 14px;
     color: rgba(255,255,255,0.9);
     margin: auto;

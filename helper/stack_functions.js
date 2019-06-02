@@ -2,12 +2,13 @@ const base64 = require('base-64');
 var ls = require('local-storage');
 var cryptoHelper = require('./crypto_helper');
 
-exports.createTask = function(taskName, startDate, creationDate, completionDate, timeHours, timeMins, priority, description, tags, notes) {
+exports.createTask = function(taskName, startDate, creationDate, completionDate, ignoreDates, timeHours, timeMins, priority, description, tags, notes) {
     var taskObject = {
         taskName: taskName,
         startDate: startDate,
         creationDate: creationDate,
         completionDate: completionDate,
+        ignoreDates: ignoreDates,
         timeHours: timeHours,
         timeMins: timeMins,
         priority: priority,
@@ -24,9 +25,7 @@ exports.encryptTask = function(task){
         return task;
     }
     for (var key in task) {
-        console.log(task[key]);
-        console.log(ls('key'));
-        var encrypted = cryptoHelper.encrypt(task[key], ls('key'));
+        var encrypted = cryptoHelper.encrypt(task[key].toString(), ls('key'));
         encTask[key] = encrypted;
     }
     return encTask;   
@@ -41,7 +40,7 @@ exports.generateTranslate = function(stack_length, index) {
         overhead = -40/5;
     }
     if (index > 0){
-        translate = "height: " + height + "%; top: " + overhead*index + "vh; z-index: " + -index + ";";
+        translate = "height: " + height + "%; transform: translateY(" + overhead*index + "vh); z-index: " + -index + ";";
     }
     translate = translate + " background: #00A89D; border:5px solid white;";
     return translate;
@@ -73,14 +72,16 @@ exports.generateTaskHTML = function(index, translate, decrypted) {
               <th style="text-align:right;"><h2>active</h2></th>            
             </tr>
             ${index==0?`
-            <tr>
+            ${!decrypted['ignoreDates']?
+            `<tr>
               <th>From: </th>
               <td>${new Date(decrypted['startDate']).toLocaleString().replace(/:00 |,/gi, '')}</td>
             </tr>
             <tr>
               <th>To: </th>
               <td>${new Date(decrypted['completionDate']).toLocaleString().replace(/:00 |,/gi, '')}</td>
-            </tr>
+            </tr>`:``
+            }
             <tr>
               <th>Duration: </th>
               <td>${decrypted['timeHours']} hours ${decrypted['timeMins']} mins<br></td>

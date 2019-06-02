@@ -2,8 +2,8 @@ body {
     background-color: rgba(100, 129, 162, 0.0);
     margin: 0;
     padding: 0;
-
 }
+
 body * {
     -webkit-app-region:no-drag!important;
 }
@@ -16,13 +16,14 @@ body * {
 table { 
   width: 90%;
 }
+
 th {
-  text-align:left;
+  text-align: left;
   font-family: opensans-extrabold;
 }
 
 td {
-  text-align:right;
+  text-align: right;
   font-size: 95%;
   font-family: opensans;
 }
@@ -33,8 +34,8 @@ td {
 
 h2{
   padding: 0;
-  margin:0;
-  font-size:140%;
+  margin: 0;
+  font-size: 140%;
 }
 
 @font-face {
@@ -53,15 +54,15 @@ h2{
 
 /* Start of framework code */
 *,*::after,*::before{box-sizing:border-box}
-.container{height: auto; display:flex;flex-direction:column}
-.stack,.panel{display:flex}
+.container{display:flex;flex-direction:column}
+.stack,.panel{display:block; position:static;}
 .stack{flex-direction:column}
 /* End of framework code */
 
 body
 {
   font-family: Helvetica, Arial, sans-serif;
-  font-size:18px;
+  font-size: 18px;
 } 
 
 .task
@@ -93,7 +94,7 @@ body
 
 .s1 > .task:last-of-type
 {
-  margin-bottom:0;
+  margin-bottom: 0;
 }
 
 .s1
@@ -102,23 +103,4 @@ body
   background: transparent;
 }
 
-.s2
-{
-  flex: 3 0 12rem;
-  flex-direction:column;
-  justify-content:space-between;
-}
 
-@media all and (min-width:601px)
-{
-  .s2
-  {
-    flex:1 0 4rem;
-    flex-direction:row;
-  }
-
-  .s2 > .panel
-  {
-    max-width: calc(33% - .25rem);
-  }
-}

@@ -110,7 +110,15 @@ $(document).ready(function () {
       maxHeight: 300
     }, 'mark', 'table', 'taskCounter']
   });
-
+  $('#dates').on('change', function() {
+    if ( $("#dates").prop("checked")) {
+      $("#start").show();
+      $("#comp").show();
+    } else {
+      $("#start").hide();
+      $("#comp").hide();
+    }
+  });
  
   function createTaskInput(){
     var d = new Date();
@@ -144,9 +152,6 @@ $(document).ready(function () {
       $("#compError").html("<br><br>");
       var testDate = new Date($('#startDate').val()).getTime();
       var compDate = new Date($('#compDate').val()).getTime();
-      if (testDate < d.getTime()){
-        $("#startError").html("Error: task start date cannot be earlier than current date.");
-      }
       if (compDate/1000/60 < testDate/1000/60) {
         $("#compError").html("Error: task completion date cannot be earlier than the start date.");
       }
@@ -154,10 +159,7 @@ $(document).ready(function () {
     $('#compDate').on('input', function(){
       $("#compError").html("<br><br>");
       var testDate = new Date($('#startDate').val()).getTime();
-      var compDate = new Date($('#compDate').val()).getTime()
-      if (compDate < d.getTime()){
-        $("#compError").html("Error: task completion date cannot be earlier than current date.");
-      }
+      var compDate = new Date($('#compDate').val()).getTime();
       if (compDate/1000/60 < testDate/1000/60) {
         $("#compError").html("Error: task completion date cannot be earlier than the start date.");
       }
@@ -211,10 +213,6 @@ $(document).ready(function () {
         $("#tagError").html(tagError);
         count++;
       }
-      if (testDate < d.getTime()){
-        $("#startError").html("Error: task start date cannot be earlier than current date.");
-        count++;
-      }
       if (compDate < d.getTime()){
         $("#compError").html("Error: task completion date cannot be earlier than current date.");
         count++;
@@ -223,11 +221,15 @@ $(document).ready(function () {
         $("#compError").html("Error: task completion date cannot be earlier than the start date.");
         count++;
       }
+      var ignoreDates = false;
+      if (!$("#dates").prop("checked")){
+        ignoreDates = true;
+      }
       if (count > 0){
         $("#error").html("Invalid entries were found that need to be fixed before proceeding.");
       } else {
         var stack = ls('stack');
-        stack.push(stackFunctions.encryptTask(stackFunctions.createTask(taskName, startDate, creationDate, completionDate, timeHours.toString(), timeMins.toString(), priority.toString(), description, tags, notes)))
+        stack.push(stackFunctions.encryptTask(stackFunctions.createTask(taskName, startDate, creationDate, completionDate, ignoreDates, timeHours.toString(), timeMins.toString(), priority.toString(), description, tags, notes)))
         ls('stack', stack); 
         console.log(d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate());
         githubFunctions.createUpdateFile(ls('token'), ls('username'), ls('repoName'), d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate(), JSON.stringify(ls('stack')));
