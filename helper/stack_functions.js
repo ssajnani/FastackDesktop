@@ -33,17 +33,15 @@ exports.encryptTask = function(task){
 
 exports.generateTranslate = function(stack_length, index) {
     var height = 90/(stack_length-1);
-    var translate = "height: 50%;";
     var overhead = -40/(stack_length-1);
     if (stack_length > 6){
         height = 90/5;
         overhead = -40/5;
     }
-    if (index > 0){
-        translate = "height: " + height + "%; transform: translateY(" + overhead*index + "vh); z-index: " + -index + ";";
-    }
-    translate = translate + " background: #00A89D; border:5px solid white;";
-    return translate;
+    var translate = index>0?"height: " + height + "%; transform: translateY(" + overhead*index + "vh); ":"height: 50%;";
+    translate = translate + " z-index: " + (stack_length-index) + ";";
+    overhead = overhead + 2/(stack_length-1);
+    return [translate, overhead];
 }
 
 exports.getRandomTheme = function() {
@@ -63,15 +61,15 @@ exports.getRandomTheme = function() {
         }
         });
 }
+//+ </h2>':'<h2>'+decrypted['taskName']+'
 //<th><h2>${decrypted['taskName'].length>12?decrypted['taskName'].slice(0,12)+"...":decrypted['taskName']}</h2></th>
-exports.generateTaskHTML = function(index, translate, decrypted) {
-    return '<div id="t' + index + '" class="task" style="' + translate + '">' +
-            `<table align="center" ${index!=0?"style='position:absolute;bottom:10%;left:5%;'":""}>
+exports.generateTaskHTML = function(index, translate, decrypted,overhead) {
+    return '<div id="t' + index + '" class="task taskName" style="' + translate + '">' +
+            `<table align="center" ${index!=0?"style='position:absolute; left: 5%; top: "+ -overhead+"vh;'":""}>
             <tr>
-              <th>${decrypted['taskName'].length>12?'<marquee style="width:80%" scrollamount="5" behavior="scroll" direction="left"><h2>'+decrypted['taskName']+'</h2></marquee>':'<h2>'+decrypted['taskName']+'</h2>'}</th>
+              <th><h2 class="header">${decrypted['taskName']}</h2></th>
               <th style="text-align:right;"><h2>active</h2></th>            
             </tr>
-            ${index==0?`
             ${!decrypted['ignoreDates']?
             `<tr>
               <th>From: </th>
@@ -99,7 +97,21 @@ exports.generateTaskHTML = function(index, translate, decrypted) {
               <td>${new Date(decrypted['creationDate']).toLocaleString().replace(/:00 |,/gi, '')}<br></td>
             </tr>
             </table>
-            </div>`:'</table></div>'}`;
+            </div>`;
+}
+
+exports.generateFullStackHTML = function(){
+    var return_val = "";
+    var stack_length = ls('stack').length;
+    for (var index = 0; index < stack_length; index++){
+        var result = this.generateTranslate(stack_length, index);
+        var translate = result[0];
+        var overhead = result[1];
+        // Since we deal with Firefox and Chrome only
+        var decrypted = this.decryptTask(ls('stack')[index]);
+        return_val += this.generateTaskHTML(index, translate, decrypted, overhead);
+    }
+    return return_val;
 }
 
 exports.decryptTask = function(task){
@@ -109,7 +121,12 @@ exports.decryptTask = function(task){
     }
     for (var key in task) {
         var decrypted = cryptoHelper.decrypt(task[key], ls('key'));
-        decTask[key] = decrypted;
+        if (key == "ignoreDates"){
+            decTask[key] = (decrypted === 'true');
+        } else {
+            decTask[key] = decrypted;
+        }
+        
     }      
     return decTask;   
 }

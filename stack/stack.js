@@ -18,14 +18,25 @@ var window = BrowserWindow.getFocusedWindow();
 
 
 $(document).ready(function () {
-    var stack_length = ls('stack').length;
-    for (var index = 0; index < stack_length; index++){
-        var translate = stackFunctions.generateTranslate(stack_length, index);
-        // Since we deal with Firefox and Chrome only
-        var decrypted = stackFunctions.decryptTask(ls('stack')[index]);
-        $(".s1").append(stackFunctions.generateTaskHTML(index, translate, decrypted));
 
-        
-
-    }
+    $(".s1").append(stackFunctions.generateFullStackHTML());
+    $(".taskName").mouseover(function(){
+        var $c = $(this).find('.header')
+           .clone()
+           .css({display: 'inline', width: 'auto', visibility: 'hidden'})
+           .appendTo('body');
+        if (!$(this).find('.header').parent().is('marquee') && $c.width() > $(this).find('.header').width()){
+            $(this).find('.header').css("text-overflow", "initial");
+            $(this).find('.header').css("overflow", "initial");
+            $(this).find('.header').wrap('<marquee scrollamount="5" behavior="scroll" direction="left"></marquee>');
+        }
+        $c.remove();
+      
+    });
+    
+    $(".taskName").mouseleave(function(){
+        $(this).find('.header').css("text-overflow", "ellipsis");
+        $(this).find('.header').css("overflow", "hidden");
+        $(this).find('.header').closest('marquee').replaceWith($(this).find('.header'));
+    });
 });

@@ -213,10 +213,6 @@ $(document).ready(function () {
         $("#tagError").html(tagError);
         count++;
       }
-      if (compDate < d.getTime()){
-        $("#compError").html("Error: task completion date cannot be earlier than current date.");
-        count++;
-      }
       if (compDate/1000/60 < testDate/1000/60) {
         $("#compError").html("Error: task completion date cannot be earlier than the start date.");
         count++;
