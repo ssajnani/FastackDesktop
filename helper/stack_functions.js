@@ -65,7 +65,7 @@ exports.getRandomTheme = function() {
 //<th><h2>${decrypted['taskName'].length>12?decrypted['taskName'].slice(0,12)+"...":decrypted['taskName']}</h2></th>
 exports.generateTaskHTML = function(index, translate, decrypted,overhead) {
     return '<div id="t' + index + '" class="task taskName" style="' + translate + '">' +
-            `<table align="center" ${index!=0?"style='position:absolute; left: 5%; top: "+ -overhead+"vh;'":""}>
+            `<table align="center" ${index!=0?"style='position:absolute; top: "+ -overhead*1.1+"vh;'":""}>
             <tr>
               <th><h2 class="header">${decrypted['taskName']}</h2></th>
               <th style="text-align:right;"><h2>active</h2></th>            
@@ -113,6 +113,22 @@ exports.generateFullStackHTML = function(){
     }
     return return_val;
 }
+
+
+exports.displayStatus = function(){
+    var return_val = "";
+    var stack_length = ls('stack').length;
+    for (var index = 0; index < stack_length; index++){
+        var result = this.generateTranslate(stack_length, index);
+        var translate = result[0];
+        var overhead = result[1];
+        // Since we deal with Firefox and Chrome only
+        var decrypted = this.decryptTask(ls('stack')[index]);
+        return_val += this.generateTaskHTML(index, translate, decrypted, overhead);
+    }
+    return return_val;
+}
+
 
 exports.decryptTask = function(task){
     var decTask = {};

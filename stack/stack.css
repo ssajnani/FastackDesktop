@@ -15,16 +15,21 @@ body * {
 
 table { 
   width: 90%;
+  left: 5%;
   table-layout: fixed;
+  position: absolute;
+}
+
+tr {
+  padding: 0;
 }
 
 th {
   text-align: left;
-  text-overflow: ellipsis;
   width: 50%;
   white-space: nowrap;
-  overflow: hidden;
   font-family: opensans-extrabold;
+  
 }
 
 td {
@@ -74,8 +79,8 @@ body
 
 .task
 {
-  padding-top: 4%;
-  text-overflow: ellipsis;
+  padding-top: 5%;
+  text-overflow: clip;
   position: relative;
   border-radius: 25px;
   color: black;

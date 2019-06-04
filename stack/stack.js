@@ -31,7 +31,6 @@ $(document).ready(function () {
             $(this).find('.header').wrap('<marquee scrollamount="5" behavior="scroll" direction="left"></marquee>');
         }
         $c.remove();
-      
     });
     
     $(".taskName").mouseleave(function(){
@@ -39,4 +38,18 @@ $(document).ready(function () {
         $(this).find('.header').css("overflow", "hidden");
         $(this).find('.header').closest('marquee').replaceWith($(this).find('.header'));
     });
+
+    $(".task").each(function(){
+        var taskTop = $(this).offset().top;
+        var taskH = $(this).height();
+        $(this).find('tr').each(function(){
+            var trTop = $(this).offset().top;
+            var trH = $(this).height();
+            if ($(this).index() != 0 && ((taskTop + taskH) - (trTop + trH)) < 0) {
+                $(this).css('display', 'none');
+            }
+       });
+    });
+
+    
 });
