@@ -51,5 +51,7 @@ $(document).ready(function () {
        });
     });
 
+    console.log(stackFunctions.decryptTask(ls('stack')[0]));
+
     
 });

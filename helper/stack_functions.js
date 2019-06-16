@@ -63,12 +63,12 @@ exports.getRandomTheme = function() {
 }
 //+ </h2>':'<h2>'+decrypted['taskName']+'
 //<th><h2>${decrypted['taskName'].length>12?decrypted['taskName'].slice(0,12)+"...":decrypted['taskName']}</h2></th>
-exports.generateTaskHTML = function(index, translate, decrypted,overhead) {
+exports.generateTaskHTML = function(index, translate, decrypted,overhead, status) {
     return '<div id="t' + index + '" class="task taskName" style="' + translate + '">' +
             `<table align="center" ${index!=0?"style='position:absolute; top: "+ -overhead*1.1+"vh;'":""}>
             <tr>
               <th><h2 class="header">${decrypted['taskName']}</h2></th>
-              <th style="text-align:right;"><h2>active</h2></th>            
+              <th style="text-align:right;"><h2>${status}</h2></th>            
             </tr>
             ${!decrypted['ignoreDates']?
             `<tr>
@@ -109,25 +109,44 @@ exports.generateFullStackHTML = function(){
         var overhead = result[1];
         // Since we deal with Firefox and Chrome only
         var decrypted = this.decryptTask(ls('stack')[index]);
-        return_val += this.generateTaskHTML(index, translate, decrypted, overhead);
+        var status = this.generateStatus(decrypted);
+        return_val += this.generateTaskHTML(index, translate, decrypted, overhead, status);
     }
     return return_val;
 }
 
-
-exports.displayStatus = function(){
-    var return_val = "";
-    var stack_length = ls('stack').length;
-    for (var index = 0; index < stack_length; index++){
-        var result = this.generateTranslate(stack_length, index);
-        var translate = result[0];
-        var overhead = result[1];
-        // Since we deal with Firefox and Chrome only
-        var decrypted = this.decryptTask(ls('stack')[index]);
-        return_val += this.generateTaskHTML(index, translate, decrypted, overhead);
+exports.generateStatus = function(decrypted_task){
+    var status = "";
+    if (!decrypted_task.ignoreDates){
+        var current = new Date();
+        var start = new Date(decrypted_task.startDate);
+        var comp = new Date(decrypted_task.completionDate);
+        
+        if (current >= start && current <= comp) {
+            status = "active";
+        } else if (current < start) {
+            status = "upcoming";
+        } else if (current > comp) {
+            status = "overdue";
+        }
+    } else {
+        status = "active";
     }
-    return return_val;
+    return status;
 }
+
+// exports.displayStatus = function(){
+//     var return_val = "";
+//     for (var index = 0; index < stack_length; index++){
+//         var result = this.generateStatus(ls('stack'), index);
+//         var translate = result[0];
+//         var overhead = result[1];
+//         // Since we deal with Firefox and Chrome only
+//         var decrypted = this.decryptTask(ls('stack')[index]);
+//         return_val += this.generateTaskHTML(index, translate, decrypted, overhead);
+//     }
+//     return return_val;
+// }
 
 
 exports.decryptTask = function(task){
