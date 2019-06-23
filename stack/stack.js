@@ -18,7 +18,7 @@ var window = BrowserWindow.getFocusedWindow();
 
 
 $(document).ready(function () {
-
+    setInterval(function(){ stackFunctions.stackSort()});
     $(".s1").append(stackFunctions.generateFullStackHTML());
     $(".taskName").mouseover(function(){
         var $c = $(this).find('.header')
@@ -50,8 +50,4 @@ $(document).ready(function () {
             }
        });
     });
-
-    console.log(stackFunctions.decryptTask(ls('stack')[0]));
-
-    
 });

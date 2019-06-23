@@ -1,8 +1,9 @@
 const base64 = require('base-64');
 var ls = require('local-storage');
 var cryptoHelper = require('./crypto_helper');
+var countdownTimer;
 
-exports.createTask = function(taskName, startDate, creationDate, completionDate, ignoreDates, timeHours, timeMins, priority, description, tags, notes) {
+exports.createTask = function(taskName, startDate, creationDate, completionDate, ignoreDates, timeHours, timeMins, priority, description, tags, notes, timeTaken) {
     var taskObject = {
         taskName: taskName,
         startDate: startDate,
@@ -14,9 +15,42 @@ exports.createTask = function(taskName, startDate, creationDate, completionDate,
         priority: priority,
         description: description,
         tags: tags,
-        notes: notes
+        notes: notes,
+        timeTaken: timeTaken 
     }
     return taskObject;
+}
+
+exports.stackSort = function(){
+    var stack = ls('stack');
+    stack.sort(function(a,b){
+        var dec_b = decryptTask(b);
+        var dec_a = decryptTask(a);
+        return (dec_b.ignoreDates - dec_a.ignoreDates) || (!dec_b.ignoreDates && !dec_a.ignoreDates && (new Date(dec_a.startDate) - new Date(dec_b.startDate))) || dec_b.priority - dec_a.priority ||  (!dec_b.ignoreDates && !dec_a.ignoreDates && (new Date(dec_a.completionDate) - new Date(dec_b.completionDate))) ;
+      })
+    var stack_length = stack.length;
+    var overdue = []
+    var first = 0;
+    var count = 0;
+    for (var i = 0; i < stack_length; i++){
+    var task = this.decryptTask(stack[i]);
+    if (new Date(task.completionDate) < new Date() && !task.ignoreDates){
+        if (count == 0){
+        first = i;
+        }
+        overdue.push(stack[i]);
+        count++;
+    }
+    }
+    overdue.sort(function(a,b){
+        var dec_b = decryptTask(b);
+        var dec_a = decryptTask(a);
+        return dec_b.priority - dec_a.priority;
+    });
+    stack.splice(first, count);
+    stack = overdue.concat(stack);
+    ls('stack', stack);
+    return stack;
 }
 
 exports.encryptTask = function(task){
@@ -29,6 +63,14 @@ exports.encryptTask = function(task){
         encTask[key] = encrypted;
     }
     return encTask;   
+}
+
+var encryptItem = exports.encryptItem = function(task, key){
+    if (!ls('key')) {
+        return task[key];
+    }
+    var encrypted = cryptoHelper.encrypt(task[key].toString(), ls('key'));
+    return encrypted;
 }
 
 exports.generateTranslate = function(stack_length, index) {
@@ -61,10 +103,37 @@ exports.getRandomTheme = function() {
         }
         });
 }
+
+exports.isToday = function(someDate) {
+    var today = new Date();
+    return someDate.getDate() == today.getDate() &&
+      someDate.getMonth() == today.getMonth() &&
+      someDate.getFullYear() == today.getFullYear()
+  }
+
+
+exports.previousDate = function(someDate) {
+    var today = new Date();
+    return someDate.getDate() < today.getDate();
+}
+
+exports.futureDate = function(someDate) {
+    var today = new Date();
+    return someDate.getDate() > today.getDate();
+}
+ 
 //+ </h2>':'<h2>'+decrypted['taskName']+'
 //<th><h2>${decrypted['taskName'].length>12?decrypted['taskName'].slice(0,12)+"...":decrypted['taskName']}</h2></th>
 exports.generateTaskHTML = function(index, translate, decrypted,overhead, status) {
-    return '<div id="t' + index + '" class="task taskName" style="' + translate + '">' +
+    var color = "";
+    if (status == "overdue"){
+        color = "#DC143C;";
+    } else if (status == "active"){
+        color = "#00A89D;";
+    } else {
+        color = "#FFD700;";
+    }
+    return '<div id="t' + index + '" class="task taskName" style="background: ' + color + translate + '">' +
             `<table align="center" ${index!=0?"style='position:absolute; top: "+ -overhead*1.1+"vh;'":""}>
             <tr>
               <th><h2 class="header">${decrypted['taskName']}</h2></th>
@@ -135,21 +204,57 @@ exports.generateStatus = function(decrypted_task){
     return status;
 }
 
-// exports.displayStatus = function(){
-//     var return_val = "";
-//     for (var index = 0; index < stack_length; index++){
-//         var result = this.generateStatus(ls('stack'), index);
-//         var translate = result[0];
-//         var overhead = result[1];
-//         // Since we deal with Firefox and Chrome only
-//         var decrypted = this.decryptTask(ls('stack')[index]);
-//         return_val += this.generateTaskHTML(index, translate, decrypted, overhead);
-//     }
-//     return return_val;
-// }
+exports.countdown = function(index){
+    // Set the date we're counting down to
+    var task = stackFunctions.decryptTask(ls('stack')[index]);
+    var dt = new Date();
+    dt.setHours(dt.getHours() + parseInt(task.timeHours));
+    dt.setMinutes(dt.getMinutes() + parseInt(task.timeMins));
+    dt.setSeconds(dt.getSeconds() - (parseInt(task.timeTaken)/1000));
 
+    // Update the count down every 1 second
+    var x = setInterval(function() {
+    var stack = ls('stack');
+    var task = stackFunctions.decryptTask(stack[index]);
+    console.log(task.timeTaken);
 
-exports.decryptTask = function(task){
+    // Get today's date and time
+    var now = new Date().getTime();
+        
+    // Find the distance between now and the count down date
+    var distance = dt.getTime() - now;
+    console.log(distance);
+    var secHours = parseInt(task.timeHours) * (1000 * 60 * 60);
+    var secMins = parseInt(task.timeMins) * (1000 * 60);
+    stack[index].timeTaken = (secHours+secMins) - distance;
+    console.log(stack[index].timeTaken);
+    console.log(secHours+secMins);
+    stack[index].timeTaken = encryptItem(stack[index], 'timeTaken');
+    ls('stack', stack);
+        
+    // Time calculations for days, hours, minutes and seconds
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+    // Output the result in an element with id="demo"
+    document.getElementById("demo").innerHTML = hours + "h "
+    + minutes + "m " + seconds + "s ";
+        
+
+    }, 1000);
+    return x;
+}
+
+exports.clockIn = function(index){
+    countdownTimer = this.countdown(index);
+}
+
+exports.clockOut = function(){
+    clearInterval(countdownTimer);
+}
+
+var decryptTask = exports.decryptTask = function(task){
     var decTask = {};
     if (!ls('key')) {
         return task;
@@ -164,4 +269,16 @@ exports.decryptTask = function(task){
         
     }      
     return decTask;   
+}
+
+exports.decryptItem = function(task, key){
+    if (!ls('key')) {
+        return task[key];
+    }
+    var decrypted = cryptoHelper.decrypt(task[key], ls('key'));
+    if (key == "ignoreDates"){
+        return (decrypted === 'true');
+    } else {
+        return decrypted;
+    }
 }

@@ -1,4 +1,4 @@
-
+var stackFunctions = require('../helper/stack_functions');
 
 $(document).ready(function () {
   function getCreateSettings(callback) {
@@ -37,6 +37,13 @@ $(document).ready(function () {
     globalShortcut.register(settingsObject.newTask, function () {
         window.location.replace("./createTask.html");
       });
+    globalShortcut.register(settingsObject.clockIn, function () {
+      stackFunctions.clockIn(0);
+    });
+    globalShortcut.register(settingsObject.clockOut, function () {
+      stackFunctions.clockOut();
+    });
+      
   }
   var settings = {
     "openClose": "alt+z",

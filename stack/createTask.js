@@ -41,11 +41,6 @@ $(document).ready(function () {
     x[n].className += " active";
   }
 
-  //function createTask
-  function createTask(stack) {
-    stack
-  }
-
   $('#tdate').bind('input propertychange', function () {
     console.log($('#tdate').val());
   });
@@ -225,9 +220,10 @@ $(document).ready(function () {
         $("#error").html("Invalid entries were found that need to be fixed before proceeding.");
       } else {
         var stack = ls('stack');
-        stack.push(stackFunctions.encryptTask(stackFunctions.createTask(taskName, startDate, creationDate, completionDate, ignoreDates, timeHours.toString(), timeMins.toString(), priority.toString(), description, tags, notes)))
-        ls('stack', stack); 
-        console.log(d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate());
+        var timeTaken = 0;
+        stack.push(stackFunctions.encryptTask(stackFunctions.createTask(taskName, startDate, creationDate, completionDate, ignoreDates, timeHours.toString(), timeMins.toString(), priority.toString(), description, tags, notes, timeTaken)))
+        ls('stack', stack);
+        stackFunctions.stackSort();
         githubFunctions.createUpdateFile(ls('token'), ls('username'), ls('repoName'), d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate(), JSON.stringify(ls('stack')));
         window.location.replace("./stack.html");
       }

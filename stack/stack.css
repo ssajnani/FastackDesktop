@@ -34,7 +34,7 @@ th {
 
 td {
   text-align: right;
-  font-size: 95%;
+  font-size: 90%;
   font-family: opensans;
 }
 
@@ -85,7 +85,6 @@ body
   border-radius: 25px;
   color: black;
   opacity: 0.99;
-  background: #00A89D;
 	box-shadow: 0 0.2em 1em 0.3em rgba(0,0,0, 0.9); 
   border:5px solid white;
   overflow: hidden;
