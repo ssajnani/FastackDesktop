@@ -21,7 +21,11 @@ app.on('ready', () => {
 
   // Setup the menubar with an icon
   let icon = nativeImage.createFromDataURL(base64Icon);
-  tray = new Tray('./images/va@2x.png');
+  var imageFile = './images/va@2x.png';
+  if (process.platform == 'darwin') {
+    imageFile = './images/mac@2x.png';
+  }
+  tray = new Tray(imageFile);
 
 
   // Add a click handler so that when the user clicks on the menubar icon, it shows
