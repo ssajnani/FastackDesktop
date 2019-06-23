@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src='../node_modules/markdown-it/dist/markdown-it.js'></script>
+    <script src="../node_modules/to-mark/dist/to-mark.js"></script>
+    <script src="../node_modules/tui-code-snippet/dist/tui-code-snippet.js"></script>
+    <script src="../node_modules/codemirror/lib/codemirror.js"></script>
+    <script src="../node_modules/squire-rte/build/squire-raw.js"></script>
+    <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
+    <script src="../node_modules/tui-editor/dist/tui-editor-Editor.js"></script>
+    <script src="../node_modules/tui-chart/dist/tui-chart.js"></script>
+    <script src="../node_modules/tui-editor/dist/tui-editor-extTable.js"></script>
+    <script src="../node_modules/tui-editor/dist/tui-editor-extChart.js"></script>
+    <script src="../node_modules/plantuml-encoder/lib/plantuml-encoder.js"></script>
+    <script src="../node_modules/tui-editor/dist/tui-editor-extUML.js"></script>
+    <link rel="stylesheet" href="../node_modules/tui-editor/dist/tui-editor.css">
+    <link rel="stylesheet" href="../node_modules/tui-chart/dist/tui-chart.css">
+    <link rel="stylesheet" href="../node_modules/tui-editor/dist/tui-editor-contents.css">
+    <title>FaStack</title>
+    <link rel="stylesheet" type="text/css" href="stackInfo.css">
+</head>
+<body class="draggable">
+
+<div>
+    <div class="rows">
+        <div class="column">
+            <br>
+            <p id="createTaskTitle">Settings</p>
+            <form id="createNewTask">
+                <div class="tab">
+                    <div class="taskInput">
+                        <label for="tname">Open/Close Window</label><br><br>
+                        <input id="openClose" type="text" name="openClose">
+                    </div><br>
+                </div> 
+                <span id="error" class="error"><br><br></span>
+                <br>
+                <br>
+                <center><input type="submit" id="updateSettings" value="Update Settings"></center>
+            </form>
+        </div>
+    </div>
+</div>
+<script charset="utf-8" type="text/javascript" src="./createTask.js"></script>
+<script charset="utf-8" type="text/javascript" src="./settings.js"></script>
+<script charset="utf-8" type="text/javascript" src="./setting.js"></script>
+
+</body>
+</html>

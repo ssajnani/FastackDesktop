@@ -1,7 +1,7 @@
 const base64 = require('base-64');
 var ls = require('local-storage');
 var cryptoHelper = require('./crypto_helper');
-var countdownTimer;
+var countdownTimer = 0;
 
 exports.createTask = function(taskName, startDate, creationDate, completionDate, ignoreDates, timeHours, timeMins, priority, description, tags, notes, timeTaken) {
     var taskObject = {
@@ -137,7 +137,7 @@ exports.generateTaskHTML = function(index, translate, decrypted,overhead, status
             `<table align="center" ${index!=0?"style='position:absolute; top: "+ -overhead*1.1+"vh;'":""}>
             <tr>
               <th><h2 class="header">${decrypted['taskName']}</h2></th>
-              <th style="text-align:right;"><h2>${status}</h2></th>            
+              <th id="status" style="text-align:right;"><h2>${status}</h2></th>            
             </tr>
             ${!decrypted['ignoreDates']?
             `<tr>
@@ -223,12 +223,9 @@ exports.countdown = function(index){
         
     // Find the distance between now and the count down date
     var distance = dt.getTime() - now;
-    console.log(distance);
     var secHours = parseInt(task.timeHours) * (1000 * 60 * 60);
     var secMins = parseInt(task.timeMins) * (1000 * 60);
     stack[index].timeTaken = (secHours+secMins) - distance;
-    console.log(stack[index].timeTaken);
-    console.log(secHours+secMins);
     stack[index].timeTaken = encryptItem(stack[index], 'timeTaken');
     ls('stack', stack);
         
@@ -238,8 +235,9 @@ exports.countdown = function(index){
     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
         
     // Output the result in an element with id="demo"
-    document.getElementById("demo").innerHTML = hours + "h "
-    + minutes + "m " + seconds + "s ";
+    document.getElementById("status").innerHTML = '<h3 id="inside">' + hours + "h "
+    + minutes + "m " + seconds + "s </h3>";
+    document.getElementById("inside").classList.add("blink_me");
         
 
     }, 1000);
@@ -247,11 +245,15 @@ exports.countdown = function(index){
 }
 
 exports.clockIn = function(index){
-    countdownTimer = this.countdown(index);
+    if (countdownTimer == 0){
+        countdownTimer = this.countdown(index);
+    }
 }
 
 exports.clockOut = function(){
     clearInterval(countdownTimer);
+    document.getElementById("status").innerHTML = '<h2>' + this.generateStatus(this.decryptTask(ls('stack')[0])) + '</h2>';
+    countdownTimer = 0;
 }
 
 var decryptTask = exports.decryptTask = function(task){
