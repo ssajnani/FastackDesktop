@@ -24,8 +24,7 @@ function getCreateSettings(callback) {
   });
 }
 function setGlobalVariables(settingsObject) {
-  globalShortcut.unregister(settingsObject.openClose);
-  globalShortcut.unregister(settingsObject.newTask);
+  globalShortcut.unregisterAll();
   globalShortcut.register(settingsObject.openClose, function () {
     if (remote.getCurrentWindow().isVisible()) {
       remote.getCurrentWindow().hide();
