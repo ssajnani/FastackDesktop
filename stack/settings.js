@@ -35,12 +35,8 @@ function getCreateSettings(callback) {
   });
 }
 function setGlobalVariables(settingsObject) {
-  globalShortcut.unregister(settingsObject.OpenCloseWindow);
-  globalShortcut.unregister(settingsObject.NewTask);
-  globalShortcut.unregister(settingsObject.ClockIn);
-  globalShortcut.unregister(settingsObject.ClockOut);
-  globalShortcut.unregister(settingsObject.Settings);
-  globalShortcut.register(settingsObject.OpenCloseWindow, function () {
+  globalShortcut.unregisterAll();
+  globalShortcut.register(settingsObject.openClose, function () {
     if (remote.getCurrentWindow().isVisible()) {
       remote.getCurrentWindow().hide();
     } else {
