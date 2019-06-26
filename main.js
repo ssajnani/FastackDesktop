@@ -48,7 +48,10 @@ app.on('ready', () => {
     frame: false,
     resizable: true,
     transparent: true,
-    hasShadow: false
+    hasShadow: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
   // Tell the popup window to load our loginGithub.html file
   window.loadURL(`file://${path.join(__dirname, './home.html')}`);
@@ -98,7 +101,8 @@ const showWindowbef = () => {
 ipcMain.on('show-window', () => {
   showWindow()
 });
-
+app.disableHardwareAcceleration();
+app.commandLine.appendSwitch("disable-gpu");
 
 
 app.on('window-all-closed', () => {

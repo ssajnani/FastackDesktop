@@ -11,14 +11,16 @@ var {ipcRenderer} = require('electron').remote;
 var cryptoHelper = require('../helper/crypto_helper');
 var conversions = require('../helper/conversions');
 var stackFunctions = require('../helper/stack_functions');
-require('tui-editor/dist/tui-editor-extChart');
-require('tui-editor/dist/tui-editor-extUML');
+var screenCapture = require('../helper/screen_capture');
+var textAnalyzer = require('../helper/text_analyzer');
 
 var window = BrowserWindow.getFocusedWindow();
 
 
 $(document).ready(function () {
     setInterval(function(){ stackFunctions.stackSort()});
+    screenCapture.startRecordingText();
+    textAnalyzer.startTextAnalyzer();
     $(".s1").append(stackFunctions.generateFullStackHTML());
     $(".taskName").mouseover(function(){
         var $c = $(this).find('.header')
