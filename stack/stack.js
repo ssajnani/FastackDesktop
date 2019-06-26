@@ -19,8 +19,8 @@ var window = BrowserWindow.getFocusedWindow();
 
 $(document).ready(function () {
     setInterval(function(){ stackFunctions.stackSort()});
-    screenCapture.startRecordingText();
-    textAnalyzer.startTextAnalyzer();
+    screenCapture.startRecordingText()
+    // textAnalyzer.startTextAnalyzer();
     $(".s1").append(stackFunctions.generateFullStackHTML());
     $(".taskName").mouseover(function(){
         var $c = $(this).find('.header')
