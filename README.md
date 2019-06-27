@@ -35,3 +35,10 @@ Once tasks are created they are automatically organized based on time, with over
 So far users can also clock in and clock out based on the duration provided during task creation. If no duration was provided the task will count down from 0 seconds. These features are shown in the gif below.
 
 ![image info](https://raw.githubusercontent.com/ssajnani/FastackDesktop/master/demo/clockin_clockout.gif)
+
+Testing by using npm:
+
+1) Install node 10.16.0 and npm 6.9.0
+2) Clone the repo (git clone git@github.com:ssajnani/FastackDesktop.git)
+3) Install node modules (npm i)
+4) Run the electron app (npm start)
