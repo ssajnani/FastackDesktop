@@ -15,7 +15,9 @@ Once a stack is created the user is prompted to create a new task.
 In the creation process, only the name is a required field. There is also a notes section that allows users to enter markdown. Once the user focuses on the notes input box a display of the markdown being compiled is shown, as demonstrated below.
 
 Unfocused:
+
 ![image info](https://raw.githubusercontent.com/ssajnani/FastackDesktop/master/demo/notes_closed.PNG)
 
 Focused:
+
 ![image info](https://raw.githubusercontent.com/ssajnani/FastackDesktop/master/demo/notes_open.PNG)
