@@ -46,7 +46,8 @@ $(document).ready(function () {
           });
         
     });
-    $('#updateSettings').on('submit', function(){
+    $('#updateSettings').on('submit', function(evt){
+        evt.preventDefault();
         updateSettings(function(err, result){
             if(err){
                 console.log(err);
