@@ -38,7 +38,7 @@ So far users can also clock in and clock out based on the duration provided duri
 
 All the navigation is completed using shortcuts. The key combination for these shortcuts can be dynamically updated on the settings page as shown below.
 
-![image info](https://raw.githubusercontent.com/ssajnani/FastackDesktop/master/demo/settings.gif)
+![image info](https://raw.githubusercontent.com/ssajnani/FastackDesktop/master/demo/setting.gif)
 
 ## Upcoming Features
 
