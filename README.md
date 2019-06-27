@@ -8,5 +8,7 @@ Once a user logs in through a github portal a stack creation page is displayed w
 
 ![image info](https://raw.githubusercontent.com/ssajnani/FastackDesktop/master/demo/stack_creation.PNG)
 
+Once a stack is created the used is asked to create a new task.
 
+![image info](https://raw.githubusercontent.com/ssajnani/FastackDesktop/master/demo/new_task.PNG)
 
