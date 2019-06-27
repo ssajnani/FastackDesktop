@@ -36,7 +36,16 @@ So far users can also clock in and clock out based on the duration provided duri
 
 ![image info](https://raw.githubusercontent.com/ssajnani/FastackDesktop/master/demo/clockin_clockout.gif)
 
-Testing by using npm:
+All the navigation is completed using shortcuts. The key combination for these shortcuts can be dynamically updated on the settings page as shown below.
+
+## Upcoming Features
+
+1) Screen analytics to measure efficiency of information gathering
+2) Typing analytics to measure efficiency of information input and increase typing speed
+3) Google Drive and Dropbox functionality
+4) Buttons: Currently everything is through shortcuts which is the intended usage but in the future add buttons for clickability
+
+## Development Environment (tested on Windows and MacOS):
 
 1) Install node 10.16.0 and npm 6.9.0
 2) Clone the repo (git clone git@github.com:ssajnani/FastackDesktop.git)
