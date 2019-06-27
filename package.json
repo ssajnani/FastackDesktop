@@ -6,20 +6,6 @@
     "nodemon": "^1.17.3",
     "webpack": "^4.12.2"
   },
-  "iohook": {
-    "targets": [
-      "node-64",
-      "electron-57"
-    ],
-    "platforms": [
-      "win32",
-      "darwin"
-    ],
-    "arches": [
-      "x64",
-      "ia32"
-    ]
-  },
   "dependencies": {
     "async": "^2.6.0",
     "base-64": "^0.1.0",
@@ -27,10 +13,11 @@
     "crypto-js": "^3.1.9-1",
     "dropbox": "^4.0.16",
     "electromon": "^1.0.10",
-    "electron": "^5.0.5",
+    "electron": "4.0.0",
     "electron-screencapture": "^1.1.0",
     "github-api": "^3.0.0",
     "grpc": "^1.18.0",
+    "hotkeys-js": "^3.6.11",
     "jquery": "^3.3.1",
     "local-storage": "^1.4.2",
     "pbkdf2": "^3.0.14",

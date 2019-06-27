@@ -36,7 +36,7 @@ function getCreateSettings(callback) {
 }
 function setGlobalVariables(settingsObject) {
   globalShortcut.unregisterAll();
-  globalShortcut.register(settingsObject.openClose, function () {
+  globalShortcut.register(settingsObject.OpenCloseWindow, function () {
     if (remote.getCurrentWindow().isVisible()) {
       remote.getCurrentWindow().hide();
     } else {

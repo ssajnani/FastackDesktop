@@ -13,14 +13,12 @@ var conversions = require('../helper/conversions');
 var stackFunctions = require('../helper/stack_functions');
 var screenCapture = require('../helper/screen_capture');
 var textAnalyzer = require('../helper/text_analyzer');
-
 var window = BrowserWindow.getFocusedWindow();
 
 
 $(document).ready(function () {
     setInterval(function(){ stackFunctions.stackSort()});
-    screenCapture.startRecordingText()
-    // textAnalyzer.startTextAnalyzer();
+    screenCapture.startRecordingText();
     $(".s1").append(stackFunctions.generateFullStackHTML());
     $(".taskName").mouseover(function(){
         var $c = $(this).find('.header')
