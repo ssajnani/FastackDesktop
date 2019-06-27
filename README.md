@@ -44,6 +44,7 @@ All the navigation is completed using shortcuts. The key combination for these s
 2) Typing analytics to measure efficiency of information input and increase typing speed
 3) Google Drive and Dropbox functionality
 4) Buttons: Currently everything is through shortcuts which is the intended usage but in the future add buttons for clickability
+5) Analytics on time taken to complete tasks vs predicted time to completion
 
 ## Development Environment (tested on Windows and MacOS):
 
