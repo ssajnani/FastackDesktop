@@ -9,9 +9,8 @@ const screenshot = require('screenshot-desktop')
 var recorder = 0;
 var analyzedTextList = [];
 var efficiencyMovingAverage= [];
- 
 
-
+   
 var recognizeText = exports.recognizeText = function(base64Text, callback){
     const base64string = base64Text.split(',')[1];
     Tesseract.recognize(Buffer.from(base64string, 'base64'), 'eng')

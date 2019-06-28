@@ -57,6 +57,10 @@ function setGlobalVariables(settingsObject) {
     window.location.replace('./settings.html');
   });
     
+  globalShortcut.register(settingsObject.PopTask, function () {
+    $(".task").first().toggle('slide');
+  });
+    
 }
 var settings = {
   "OpenCloseWindow": "alt+z",
@@ -65,7 +69,8 @@ var settings = {
   "NewTask": "alt+n",
   "ClockIn": "alt+c",
   "ClockOut": "alt+v", 
-  "Settings": "alt+s"
+  "Settings": "alt+s",
+  "PopTask": "alt+p"
 };
 
 $(document).ready(function () {
