@@ -14,6 +14,7 @@
     "dropbox": "^4.0.16",
     "electromon": "^1.0.10",
     "electron": "4.0.0",
+    "electron-is-accelerator": "^0.1.2",
     "electron-screencapture": "^1.1.0",
     "github-api": "^3.0.0",
     "grpc": "^1.18.0",

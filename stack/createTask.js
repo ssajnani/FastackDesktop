@@ -181,6 +181,7 @@ $(document).ready(function () {
       var description = $("#description").val(); 
       var tags = $("#tags").val();
       var notes = $("textarea")[1].value; 
+      var complete = false;
       $("#startError").html("<br><br>"); 
       $("#compError").html("<br><br>");
       var testDate = new Date($('#startDate').val()).getTime();
@@ -219,10 +220,11 @@ $(document).ready(function () {
       if (count > 0){
         $("#error").html("Invalid entries were found that need to be fixed before proceeding.");
       } else {
-        var stack = ls('stack');
+        var stack = ls('stack')['incomplete'];
+        console.log(stack);
         var timeTaken = 0;
-        stack.push(stackFunctions.encryptTask(stackFunctions.createTask(taskName, startDate, creationDate, completionDate, ignoreDates, timeHours.toString(), timeMins.toString(), priority.toString(), description, tags, notes, timeTaken)))
-        ls('stack', stack);
+        stack.push(stackFunctions.encryptTask(stackFunctions.createTask(taskName, startDate, creationDate, completionDate, ignoreDates, timeHours.toString(), timeMins.toString(), priority.toString(), description, tags, notes, timeTaken, complete)))
+        ls('stack', {'incomplete': stack, 'complete': ls('stack')['complete']});
         stackFunctions.stackSort();
         githubFunctions.createUpdateFile(ls('token'), ls('username'), ls('repoName'), d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate(), JSON.stringify(ls('stack')));
         window.location.replace("./stack.html");

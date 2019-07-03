@@ -293,3 +293,8 @@ span {
     margin-top:38px;
     -webkit-app-region:no-drag;
 }
+
+#backButton {
+    -webkit-app-region:no-drag!important;
+    display: block;
+}

@@ -36,6 +36,7 @@ function getCreateSettings(callback) {
 }
 function setGlobalVariables(settingsObject) {
   globalShortcut.unregisterAll();
+  console.log(settingsObject);
   globalShortcut.register(settingsObject.OpenCloseWindow, function () {
     if (remote.getCurrentWindow().isVisible()) {
       remote.getCurrentWindow().hide();
@@ -58,7 +59,21 @@ function setGlobalVariables(settingsObject) {
   });
     
   globalShortcut.register(settingsObject.PopTask, function () {
-    $(".task").first().toggle('slide');
+    var stack = ls('stack');
+    if (stack['incomplete'].length > 0){
+    $(".task").first().hide("drop", {direction: "up"}, 1000);
+      setTimeout(function(){
+        stack['complete'].push(stack['incomplete'][0]);
+        stack['incomplete'].shift(); 
+        ls('stack', stack);
+        $('.s1').empty();
+        $('.s1').append(stackFunctions.generateFullStackHTML());
+        if (ls('stack')['incomplete'].length == 0){
+          window.location.replace('./createTask.html');
+        }  
+      }, 1000);
+      
+    }
   });
     
 }

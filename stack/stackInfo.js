@@ -2,7 +2,7 @@
 const { remote } = require('electron');
 const { BrowserWindow } = remote;
 const path = require('path')
-const $ = require('jquery');
+var $ = require('jquery');
 const electron = require('electron');
 const base64 = require('base-64');
 var ls = require('local-storage');
@@ -61,10 +61,10 @@ $(document).ready(function () {
     ls("repoNameInput", $("#reponame").val());
     ls("encstackdata", $("#encstackdata").prop("checked"));
     ls("stackpass", $("#stackpass").val());
-
-
     window.location.replace("./stack_info.html");
-
+  });
+  $('#backButton').on('click', function(){
+    window.location.replace("../home.html");
   });
   var id = null;
   function errorLog(message) {
@@ -74,12 +74,11 @@ $(document).ready(function () {
     }
     $('#errorDropdown').addClass("trigger");
     $('#errorDropdown').html('<img id="errorsign" src="../images/error.svg" alt="FaStack Logo" width="2000" height="2000"><b>Error</b>: ' + message);
-    id = setTimeout(function () {
-      $('#errorDropdown').removeClass("trigger");
+      id = setTimeout(function () {
+        $('#errorDropdown').removeClass("trigger");
     }, 4000);
   }
-
-
+  
   if (ls('platform') === "Github"){
     $('#RepoNameSubmit').on('submit', function (evt) {
       evt.preventDefault();
@@ -105,6 +104,7 @@ $(document).ready(function () {
                 if (err) {
                   errorLog("Repository creation failed: Ensure a repository with the same name does not exist.");
                 } else {
+                  ls('stack', {'complete':[], 'incomplete': []});
                   var fileContent = "";
                   if ($('#encstackdata').prop('checked')){
                     var salt = randomBytes(128).toString();
@@ -143,7 +143,7 @@ $(document).ready(function () {
                 $('#errorreponame').text("Cannot get the current stack from the repository: " + err.message);
               }
               ls('stack', stackValue?stackValue:[]);
-              if (ls('stack').length === 0) {
+              if (ls('stack')['incomplete'].length === 0) {
                 window.location.replace("./createTask.html");
               } else {
                 window.location.replace("./stack.html");

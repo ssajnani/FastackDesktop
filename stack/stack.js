@@ -1,7 +1,6 @@
 const {remote} = require('electron');
 const {BrowserWindow, globalShortcut} = remote;
 const path = require('path');
-const $ = require('jquery');
 var Editor = require('tui-editor');
 const electron = require('electron');
 const base64 = require('base-64');
@@ -32,7 +31,18 @@ $(document).ready(function () {
         }
         $c.remove();
     });
-    
+    $('#timeButton').click(function(){
+        if ($('#timeButton').attr('src') == "../images/clock.png"){
+            $('#timeButton').attr("src","../images/clocko.png");
+            stackFunctions.clockIn(0);
+        } else {
+            $('#timeButton').attr("src","../images/clock.png");
+            stackFunctions.clockOut();
+        }
+    });
+    $('#settingsButton').click(function(){
+        window.location.replace('./settings.html');  
+    });
     $(".taskName").mouseleave(function(){
         $(this).find('.header').css("text-overflow", "ellipsis");
         $(this).find('.header').css("overflow", "hidden");

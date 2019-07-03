@@ -1,4 +1,4 @@
-
+var isAccelerator = require("electron-is-accelerator");
 
 $(document).ready(function () {
     function keyDown(shortcut) {
@@ -12,8 +12,10 @@ $(document).ready(function () {
                 } else {
                     if (!$('#' + shortcut).val().split('+').includes(e.key)){
                         var sc = $('#' + shortcut).val() + "+" + e.key;
-                        $('#' + shortcut).val(sc);
-                        settings[shortcut] = sc;
+                        if (isAccelerator(sc)){
+                            $('#' + shortcut).val(sc);
+                            settings[shortcut] = sc;
+                        }  
                     }
                 }
                 ls('settings', settings);

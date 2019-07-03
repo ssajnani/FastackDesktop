@@ -120,8 +120,8 @@ $(document).ready(function() {
                   if (err) {
                     $('#errorreponame').text("Cannot get the current stack from the repository: " + err.message);
                   }
-                  ls('stack', stackValue?stackValue:[]);
-                  if (ls('stack').length === 0) {
+                  ls('stack', stackValue?stackValue:{'complete':[], 'incomplete': []});
+                  if (ls('stack')['incomplete'].length === 0) {
                     window.location.replace("./stack/createTask.html");
                   } else {
                     window.location.replace("./stack/stack.html");
