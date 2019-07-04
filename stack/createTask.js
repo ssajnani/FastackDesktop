@@ -17,6 +17,18 @@ var window = BrowserWindow.getFocusedWindow();
 
 
 $(document).ready(function () {
+  if(ls('stack')['incomplete'].length == 0){
+    $('#goBack').hide();
+  } else {
+    $('#goBack').show();
+  }
+  $('#goBack').click(function(){
+    window.location.replace('./stack.html');
+  })
+  if (ls('createPage') == "edit"){
+    $("#createTaskTitle").text("Edit Task");
+    $("#submitTask").val("Submit Changes");
+  }
   createTaskInput();
   function zeroPadded(val) {
     if (val >= 10)
@@ -151,6 +163,8 @@ $(document).ready(function () {
         $("#compError").html("Error: task completion date cannot be earlier than the start date.");
       }
     });
+
+    
     $('#compDate').on('input', function(){
       $("#compError").html("<br><br>");
       var testDate = new Date($('#startDate').val()).getTime();
@@ -168,6 +182,10 @@ $(document).ready(function () {
     });
 
     $('#createNewTask').on('submit', function (evt) {
+      evt.preventDefault();
+      var buttonType = $("input[type=submit][clicked=true]").val();
+      
+      if (buttonType != "Go Back") {
       var d = new Date();
       var dateString = d.getFullYear()+"-"+zeroPadded(d.getMonth() + 1)+"-"+zeroPadded(d.getDate())+"T"+zeroPadded(d.getHours())+":"+zeroPadded(d.getMinutes());
       d = new Date(dateString);
@@ -221,15 +239,21 @@ $(document).ready(function () {
         $("#error").html("Invalid entries were found that need to be fixed before proceeding.");
       } else {
         var stack = ls('stack')['incomplete'];
-        console.log(stack);
-        var timeTaken = 0;
-        stack.push(stackFunctions.encryptTask(stackFunctions.createTask(taskName, startDate, creationDate, completionDate, ignoreDates, timeHours.toString(), timeMins.toString(), priority.toString(), description, tags, notes, timeTaken, complete)))
+        if (ls('createPage') == "add"){
+          var timeTaken = 0;
+          stack.push(stackFunctions.encryptTask(stackFunctions.createTask(taskName, startDate, creationDate, completionDate, ignoreDates, timeHours.toString(), timeMins.toString(), priority.toString(), description, tags, notes, timeTaken, complete)));
+        } else {
+          var timeTaken = parseInt(stackFunctions.decryptItem(stack[ls('currIndex')], 'timeTaken'));
+          stack[ls('currIndex')] = stackFunctions.encryptTask(stackFunctions.createTask(taskName, startDate, creationDate, completionDate, ignoreDates, timeHours.toString(), timeMins.toString(), priority.toString(), description, tags, notes, timeTaken, complete)); 
+        }
+        
         ls('stack', {'incomplete': stack, 'complete': ls('stack')['complete']});
         stackFunctions.stackSort();
         githubFunctions.createUpdateFile(ls('token'), ls('username'), ls('repoName'), d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate(), JSON.stringify(ls('stack')));
         window.location.replace("./stack.html");
       }
       //window.location.replace("./stack.html");
+    }
     });
   }
 });

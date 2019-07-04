@@ -20,6 +20,7 @@ $(document).ready(function () {
   remote.getCurrentWindow().show();
   function repoAlreadyExists(){
     if (ls("repoName")){
+      console.log('heee');
       $("#encstackdata").hide();
       $("#reponame").hide();
       $("#checkBoxText").hide();
@@ -122,8 +123,9 @@ $(document).ready(function () {
                     if (err) {
                       $('#errorreponame').text("Cannot create an identifier file in the repository: " + err);
                     } else {
-                      ls('stackPassword', password);
+                      ls('key', password);
                       ls('repoName', repoName);
+                      ls('createPage', 'add');
                       window.location.replace("./createTask.html");
                     }
                   });
@@ -137,13 +139,14 @@ $(document).ready(function () {
           var randHash = cryptoHelper.decrypt(encryptSecrets[1], password);
           var hashedPass = cryptoHelper.hashPassword(password, salt);
           if (randHash.endsWith(hashedPass.hash.toString())){
-            ls('stackPassword', password);
+            ls('key', password);
             prestack.lookForStack(function (err, stackValue) {
               if (err) {
                 $('#errorreponame').text("Cannot get the current stack from the repository: " + err.message);
               }
-              ls('stack', stackValue?stackValue:[]);
+              ls('stack', stackValue?stackValue:{'complete': [], 'incomplete': []});
               if (ls('stack')['incomplete'].length === 0) {
+                ls('createPage', 'add');
                 window.location.replace("./createTask.html");
               } else {
                 window.location.replace("./stack.html");

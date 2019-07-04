@@ -14,14 +14,14 @@ var authorization_url = "";
 var TOKEN_URL = 'https://fastack.herokuapp.com/github/authenticate?code=';
 
 var window = remote.getCurrentWindow();
-
+ls.clear();
 ls("GITHUB_CLIENT_ID", '442dbe2e6a65ceb60986');
 ls("DROPBOX_CLIENT_ID", 'sd6zmtq7kdohuqh');
 const AUTH_URL_PATH = 'https://api.github.com/authorizations';
 var TOKEN = "";
 /* Initial Page with github, dropbox, and google drive options */
 $(document).ready(function() {
-    // 
+    
     $("#login input[type=submit]").click(function() {
       $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
       $(this).attr("clicked", "true");
@@ -109,6 +109,7 @@ $(document).ready(function() {
           ls('repoName', "");
           githubFunctions.checkFastackRepoExists(ls('token'), ls('username'), function(err, result){
             if (result[0]){
+              ls('encstackdata', true);
               console.log(result[0]);
               ls('repoName', result[0]);
               if (result[1]){
@@ -122,6 +123,7 @@ $(document).ready(function() {
                   }
                   ls('stack', stackValue?stackValue:{'complete':[], 'incomplete': []});
                   if (ls('stack')['incomplete'].length === 0) {
+                    ls('createPage', 'add');
                     window.location.replace("./stack/createTask.html");
                   } else {
                     window.location.replace("./stack/stack.html");

@@ -9,8 +9,8 @@ exports.encrypt = function(text, password){
 
 exports.decrypt = function(text, password){
     try {
-        var decryptedText = CryptoJS.AES.decrypt(atob(text).replace(/\*/g, "/"), password).toString(CryptoJS.enc.Utf8);
-        return decryptedText;
+        var decryptedText = CryptoJS.AES.decrypt(atob(text).replace(/\*/g, "/").toString(), password);
+        return decryptedText.toString(CryptoJS.enc.Utf8);
     } catch (err){
         return ""
     }

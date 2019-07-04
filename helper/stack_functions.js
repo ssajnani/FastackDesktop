@@ -74,7 +74,8 @@ var encryptItem = exports.encryptItem = function(task, key){
     return encrypted;
 }
 
-exports.generateTranslate = function(stack_length, index) {
+exports.generateTranslate = function(stack_length, index, current) {
+    console.log(current);
     var height = 85/(stack_length-1);
     var overhead = -40/(stack_length-1);
     if (stack_length == 1){
@@ -84,8 +85,11 @@ exports.generateTranslate = function(stack_length, index) {
         height = 85/5;
         overhead = -40/5;
     }
-    var translate = index>0?"height: " + height + "%; transform: translateY(" + overhead*index + "vh); ":"height: 50%;";
-    translate = translate + " z-index: " + (stack_length-index) + ";";
+    var translate = index>0?"transform: translateY(" + overhead*index + "vh); ":"";
+    var actualH = index!=current?"height: " + height + "%;":"height: 50%;";
+    translate = translate+actualH;
+    translate = translate + ` z-index: ${index<current?(stack_length+index-current):(stack_length-index+current)};`;
+    console.log(translate);
     overhead = overhead + 2/(stack_length-1);
     return [translate, overhead];
 }
@@ -128,7 +132,7 @@ exports.futureDate = function(someDate) {
  
 //+ </h2>':'<h2>'+decrypted['taskName']+'
 //<th><h2>${decrypted['taskName'].length>12?decrypted['taskName'].slice(0,12)+"...":decrypted['taskName']}</h2></th>
-exports.generateTaskHTML = function(index, translate, decrypted,overhead, status) {
+exports.generateTaskHTML = function(index, translate, decrypted,overhead, status,current) {
     var color = "";
     if (status == "overdue"){
         color = "#DC143C;";
@@ -138,7 +142,7 @@ exports.generateTaskHTML = function(index, translate, decrypted,overhead, status
         color = "#FFD700;";
     }
     return '<div id="t' + index + '" class="task taskName" style="background: ' + color + translate + '">' +
-            `<table align="center" ${index!=0?"style='position:absolute; top: "+ -overhead*1.1+"vh;'":""}>
+            `<table align="center" ${index>current?"style='position:absolute; top: "+ -overhead*1.1+"vh;'":""}>
             <tr>
               <th><h2 class="header">${decrypted['taskName']}</h2></th>
               <th id="status" style="text-align:right;"><h2>${status}</h2></th>            
@@ -173,17 +177,17 @@ exports.generateTaskHTML = function(index, translate, decrypted,overhead, status
             </div>`;
 }
 
-exports.generateFullStackHTML = function(){
+exports.generateFullStackHTML = function(current){
     var return_val = "";
     var stack_length = ls('stack')['incomplete'].length;
     for (var index = 0; index < stack_length; index++){
-        var result = this.generateTranslate(stack_length, index);
+        var result = this.generateTranslate(stack_length, index, current);
         var translate = result[0];
         var overhead = result[1];
         // Since we deal with Firefox and Chrome only
         var decrypted = this.decryptTask(ls('stack')['incomplete'][index]);
         var status = this.generateStatus(decrypted);
-        return_val += this.generateTaskHTML(index, translate, decrypted, overhead, status);
+        return_val += this.generateTaskHTML(index, translate, decrypted, overhead, status, current);
     }
     return return_val;
 }

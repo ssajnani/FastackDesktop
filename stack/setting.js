@@ -24,6 +24,9 @@ $(document).ready(function () {
             }
         }
     }
+    $('#backButton').click(function(){
+        window.location.replace('./stack.html');
+    })
     getCreateSettings(function(err, result){
         $.each(ls('settings'), function(i, val){
 

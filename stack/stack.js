@@ -17,8 +17,9 @@ var window = BrowserWindow.getFocusedWindow();
 
 $(document).ready(function () {
     setInterval(function(){ stackFunctions.stackSort()});
+    ls('currIndex', 0);
     screenCapture.startRecordingText();
-    $(".s1").append(stackFunctions.generateFullStackHTML());
+    $(".s1").append(stackFunctions.generateFullStackHTML(ls('currIndex')));
     $(".taskName").mouseover(function(){
         var $c = $(this).find('.header')
            .clone()
@@ -30,6 +31,20 @@ $(document).ready(function () {
             $(this).find('.header').wrap('<marquee scrollamount="5" behavior="scroll" direction="left"></marquee>');
         }
         $c.remove();
+    });
+    $('#logout').click(function(){
+        window.location.replace('../home.html');
+    });
+    $('#addButton').click(function(){
+        ls('createPage', 'add');
+        window.location.replace('./createTask.html');
+    });
+    $("body").on('click', '.task', function() {
+        var id = this.id;
+        var numb = parseInt(id.match(/\d+/g));
+        ls('currIndex', numb);
+        $('.s1').empty();
+        $(".s1").append(stackFunctions.generateFullStackHTML(numb));
     });
     $('#timeButton').click(function(){
         if ($('#timeButton').attr('src') == "../images/clock.png"){

@@ -45,6 +45,7 @@ function setGlobalVariables(settingsObject) {
     }
   });
   globalShortcut.register(settingsObject.NewTask, function () {
+      ls('createPage', 'add');
       window.location.replace("./createTask.html");
     });
   globalShortcut.register(settingsObject.ClockIn, function () {
@@ -52,6 +53,34 @@ function setGlobalVariables(settingsObject) {
   });
   globalShortcut.register(settingsObject.ClockOut, function () {
     stackFunctions.clockOut();
+  });
+
+  globalShortcut.register(settingsObject.EditTask, function () {
+    ls('createPage', 'edit');
+    window.location.replace('./createTask.html');
+  });
+
+  globalShortcut.register(settingsObject.Logout, function () {
+    window.location.replace('../home.html');
+  });
+
+  globalShortcut.register(settingsObject.ScrollTaskUp, function(){
+    var index = ls('currIndex');
+    if (index > 0){
+      index--;
+      ls('currIndex', index);
+      $('.s1').empty();
+      $(".s1").append(stackFunctions.generateFullStackHTML(index));
+    } 
+  });
+  globalShortcut.register(settingsObject.ScrollTaskDown, function(){
+    var index = ls('currIndex');
+    if (index < ls('stack')['incomplete'].length){
+      index++;
+      ls('currIndex', index);
+      $('.s1').empty();
+      $(".s1").append(stackFunctions.generateFullStackHTML(index));
+    }
   });
 
   globalShortcut.register(settingsObject.Settings, function () {
@@ -65,12 +94,14 @@ function setGlobalVariables(settingsObject) {
       setTimeout(function(){
         stack['complete'].push(stack['incomplete'][0]);
         stack['incomplete'].shift(); 
+        
         ls('stack', stack);
-        $('.s1').empty();
-        $('.s1').append(stackFunctions.generateFullStackHTML());
         if (ls('stack')['incomplete'].length == 0){
+          ls('createPage', 'add');
           window.location.replace('./createTask.html');
         }  
+        $('.s1').empty();
+        $('.s1').append(stackFunctions.generateFullStackHTML(ls('currIndex')>0?ls('currIndex')-1:0));
       }, 1000);
       
     }
@@ -78,14 +109,17 @@ function setGlobalVariables(settingsObject) {
     
 }
 var settings = {
-  "OpenCloseWindow": "alt+z",
-  "NextPageTask": "Alt+Down",
-  "PreviousPageTask": "Alt+Up",
-  "NewTask": "alt+n",
-  "ClockIn": "alt+c",
-  "ClockOut": "alt+v", 
-  "Settings": "alt+s",
-  "PopTask": "alt+p"
+  "OpenCloseWindow": "Alt+Z",
+  "NewTask": "Alt+N",
+  "ClockIn": "Alt+C",
+  "ClockOut": "Alt+V", 
+  "Settings": "Alt+S",
+  "PopTask": "Alt+P",
+  "ScrollTaskUp": "Alt+Up",
+  "ScrollTaskDown": "Alt+Down",
+  "EditTask": "Alt+E",
+  "Logout": "Alt+L",
+
 };
 
 $(document).ready(function () {
