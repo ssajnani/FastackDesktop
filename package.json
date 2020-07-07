@@ -13,7 +13,7 @@
     "crypto-js": "^3.1.9-1",
     "dropbox": "^4.0.16",
     "electromon": "^1.0.10",
-    "electron": "4.0.0",
+    "electron": "9.1.0",
     "electron-is-accelerator": "^0.1.2",
     "electron-screencapture": "^1.1.0",
     "github-api": "^3.0.0",
